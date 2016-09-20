@@ -9,7 +9,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
 
-    static final String TAG = "Lesson-MainActivity";
+    static final String TAG = "Lesson-MainActivity111";
 
 
     @Override
