@@ -235,8 +235,8 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
 
     private void startStreamer() {
         Log.v(TAG, "startStreamer");
-//        mVideoRecorderManager.start();
-        mAudioRecorderManager.start();
+        mVideoRecorderManager.start();
+//        mAudioRecorderManager.start();
 
         mStreamStatus = STREAM_STATUS_ING;
     }
@@ -244,8 +244,8 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
     private void stopStreamer() {
         Log.v(TAG, "stopStreamer");
 
-//        mVideoRecorderManager.stop();
-        mAudioRecorderManager.stop();
+        mVideoRecorderManager.stop();
+//        mAudioRecorderManager.stop();
 
         mStreamer.pause();
 
@@ -405,7 +405,6 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
 
                 while (mSwitch) {
-
 
                     ShortBuffer mAudioBuffer = ShortBuffer.allocate(mAudioBufferSize);
                     int bufferReadResult = mAudioRecorder.read(mAudioBuffer.array(), 0, mAudioBuffer.capacity());

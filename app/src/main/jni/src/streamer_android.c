@@ -283,12 +283,12 @@ int init_output() {
         return -1;
     }
 
-    LOGV("creating audio AVStream ...");
-    out_audio_avstream = avformat_new_stream(out_format_ctx, NULL);
-    if (!out_audio_avstream) {
-        LOGE("failed creating audio outpout AVStream !!!");
-        return -1;
-    }
+//    LOGV("creating audio AVStream ...");
+//    out_audio_avstream = avformat_new_stream(out_format_ctx, NULL);
+//    if (!out_audio_avstream) {
+//        LOGE("failed creating audio outpout AVStream !!!");
+//        return -1;
+//    }
 
     LOGV(" :) finish init_output .");
 
@@ -354,7 +354,7 @@ int init_video_encoder() {
     //av_dict_set(&param, "profile", "main", 0);
 
 
-    av_dump_format(out_format_ctx, 0, out_url, 1);
+//    av_dump_format(out_format_ctx, 0, out_url, 1);
 
     out_video_avstream->codec = out_video_codec_ctx;
     out_video_avstream->time_base.den = out_video_codec_ctx->time_base.den;
@@ -408,14 +408,15 @@ int init_audio_encoder() {
 //    out_audio_codec_ctx->channel_layout = select_channel_layout(out_audio_codec);
 
     out_audio_codec_ctx->sample_rate = audio_sample_rate;
-    out_audio_codec_ctx->channel_layout = AV_CH_LAYOUT_STEREO;
+    out_audio_codec_ctx->channel_layout = audio_channel_layout;
 
     /** Allow the use of the experimental AAC encoder */
     out_audio_codec_ctx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
 
     out_audio_codec_ctx->channels = av_get_channel_layout_nb_channels(
             out_audio_codec_ctx->channel_layout);
-    out_audio_codec_ctx->bit_rate = 32000;
+//    out_audio_codec_ctx->bit_rate = 32000;
+    out_audio_codec_ctx->bit_rate = 44100;
 
     /**
      * Some container formats (like MP4) require global headers to be present
@@ -425,7 +426,7 @@ int init_audio_encoder() {
         out_audio_codec_ctx->flags |= CODEC_FLAG_GLOBAL_HEADER;
     }
 
-    av_dump_format(out_format_ctx, 0, out_url, 1);
+//    av_dump_format(out_format_ctx, 0, out_url, 1);
 
     out_audio_avstream->codec = out_audio_codec_ctx;
     out_audio_avstream->time_base.num = 1;
@@ -457,10 +458,10 @@ int init_encoder() {
         return res;
     }
 
-    res = init_audio_encoder();
-    if (res) {
-        return res;
-    }
+//    res = init_audio_encoder();
+//    if (res) {
+//        return res;
+//    }
 
     LOGV("all encoders has been initialized & opened successfully .");
 
@@ -558,10 +559,10 @@ int init_encode_key_params() {
         return res;
     }
 
-    res = init_audio_encode_key_params();
-    if (res) {
-        return res;
-    }
+//    res = init_audio_encode_key_params();
+//    if (res) {
+//        return res;
+//    }
 
     return 0;
 }
@@ -594,7 +595,7 @@ int streamer_init(const unsigned char *outUrl, int width, int height, int frameR
 
     audio_sample_rate = audioSampleRate;
 
-    audio_channel_layout = audioChannelLayout;
+    audioChannelLayout = audioChannelLayout;
 
     LOGV("\tURL:%s \n\tSize(width*height):%d*%d\n\tFrameRate:%d\n\tAudioSampleInHz:%d", outUrl,
          width, height, frameRate, audioSampleRate);
@@ -630,8 +631,8 @@ int streamer_init(const unsigned char *outUrl, int width, int height, int frameR
         return on_error(res);
     }
 
-    res = streamer_pcm_to_fltp_init(AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_FLTP, AV_CH_LAYOUT_MONO,
-                                    AV_CH_LAYOUT_MONO ,2048);
+    res = streamer_pcm_to_fltp_init(AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_FLTP, audioChannelLayout,
+                                    audio_sample_rate ,2048);
     if (res) {
         return on_error(res);
     }
@@ -727,7 +728,7 @@ int streamer_encode_video(jbyte *data) {
 
         av_interleaved_write_frame(out_format_ctx, &t_encoded_packet);
 
-        free(data);
+//        free(data);
         av_free_packet(&t_encoded_packet);
 
         LOGV(":) successfully with video frame %d", video_frame_counter);

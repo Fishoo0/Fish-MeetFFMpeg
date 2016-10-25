@@ -95,9 +95,9 @@
     <orderEntry type="library" exported="" name="videoinput-0.200-1.1" level="project" />
     <orderEntry type="library" exported="" name="libdc1394-2.2.3-1.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
+    <orderEntry type="library" exported="" name="libfreenect-0.5.3-1.1" level="project" />
     <orderEntry type="library" exported="" name="ffmpeg-2.8.1-1.1" level="project" />
     <orderEntry type="library" exported="" name="flycapture-2.8.3.1-1.1" level="project" />
-    <orderEntry type="library" exported="" name="libfreenect-0.5.3-1.1" level="project" />
     <orderEntry type="library" exported="" name="flandmark-1.07-1.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.1" level="project" />
