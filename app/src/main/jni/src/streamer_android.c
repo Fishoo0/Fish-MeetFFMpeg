@@ -332,8 +332,7 @@ int init_video_encoder() {
     //out_video_codec_ctx->qcompress = 0.6;
 
     // bit_rate & gop work together to get the quality & delay
-    out_video_codec_ctx->bit_rate = 1000000;
-
+    out_video_codec_ctx->bit_rate = 300000;
     // GOP : Group Of Picture
     // If alive , set it to 1 to min the delay
     out_video_codec_ctx->gop_size = 1;
@@ -415,8 +414,7 @@ int init_audio_encoder() {
 
     out_audio_codec_ctx->channels = av_get_channel_layout_nb_channels(
             out_audio_codec_ctx->channel_layout);
-//    out_audio_codec_ctx->bit_rate = 32000;
-    out_audio_codec_ctx->bit_rate = 44100;
+    out_audio_codec_ctx->bit_rate = 30000;
 
     /**
      * Some container formats (like MP4) require global headers to be present
@@ -595,10 +593,17 @@ int streamer_init(const unsigned char *outUrl, int width, int height, int frameR
 
     audio_sample_rate = audioSampleRate;
 
-    audioChannelLayout = audioChannelLayout;
 
-    LOGV("\tURL:%s \n\tSize(width*height):%d*%d\n\tFrameRate:%d\n\tAudioSampleInHz:%d", outUrl,
-         width, height, frameRate, audioSampleRate);
+    if(audioChannelLayout > 1 ) {
+        audio_channel_layout = AV_CH_LAYOUT_STEREO;
+    } else{
+        audio_channel_layout = AV_CH_LAYOUT_MONO;
+    }
+
+    audio_channel_layout = audioChannelLayout;
+
+    LOGV("\tURL:%s \n\tSize(width*height):%d*%d\n\tFrameRate:%d\n\tAudioSampleInHz:%d\n\tAudioChannelLayout:%d", outUrl,
+         width, height, frameRate, audioSampleRate,audioChannelLayout);
 
     LOGV("regisster all ...");
     av_register_all();
@@ -631,7 +636,7 @@ int streamer_init(const unsigned char *outUrl, int width, int height, int frameR
         return on_error(res);
     }
 
-    res = streamer_pcm_to_fltp_init(AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_FLTP, audioChannelLayout,
+    res = streamer_pcm_to_fltp_init(AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_FLTP, audio_channel_layout,
                                     audio_sample_rate ,2048);
     if (res) {
         return on_error(res);
@@ -803,7 +808,6 @@ int streamer_convert(enum AVSampleFormat srcSampleFormat,
 int streamer_encode_audio(uint8_t *dataPCM16, int sampleCount) {
     LOGV("streamer_encode_audio");
 
-
     uint8_t *data;
 
     LOGV("dataPCM16 addr -> %d", dataPCM16);
@@ -813,7 +817,6 @@ int streamer_encode_audio(uint8_t *dataPCM16, int sampleCount) {
         LOGV("value %dst is %x , "
                      BYTETOBINARYPATTERN, m, dataPCM16[m], BYTETOBINARY(dataPCM16[m]));
     }
-
 
     int res = -1, got_output = 1;
 

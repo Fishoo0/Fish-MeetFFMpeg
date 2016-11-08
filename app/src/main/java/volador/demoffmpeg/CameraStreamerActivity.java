@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.nio.ByteBuffer;
 import java.nio.ShortBuffer;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,31 +26,27 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
 
     static final String TAG = CameraStreamerActivity.class.getSimpleName();
 
-    public static final int TARGET_PREVIEW_WIDTH = 480;
-    public static final int TARGET_PREVIEW_HEIGHT = 800;
+    public static final int TARGET_PREVIEW_WIDTH = 320;
+    public static final int TARGET_PREVIEW_HEIGHT = 240;
     public static final int TARGET_FRAME_RATE = 15;
+
     public static final int TARGET_AUDIO_SAMPLE = 44100;
-
     public static final int TARGET_AUDIO_CHANNEL_LAYOUT = AudioFormat.CHANNEL_IN_MONO;
-
+    public static int TARGET_AUDIO_FORMAT = AudioFormat.ENCODING_PCM_16BIT;
 
     private int mImageWidth = TARGET_PREVIEW_WIDTH;
     private int mImageHeight = TARGET_PREVIEW_HEIGHT;
     private int mFrameRate = TARGET_FRAME_RATE;
 
-    private int mAudioSample = TARGET_AUDIO_SAMPLE;
-
-    private int mAudioChannelLayout = TARGET_AUDIO_CHANNEL_LAYOUT;
-
     private CameraSurfaceView mCameraTextureView;
 
     private Camera mCamera;
 
-
     private FFMpegStreamer mStreamer;
 
 
-    private static String RTMP_URL = "rtmp://192.168.1.188:1935/fishdemo/fish";
+    //    private static String URL = "rtmp://192.168.1.188:1935/fishdemo/fish";
+    private static String URL = FileUtils.getMoveFilePath("test.flv");
 
     private VideoRecorderManager mVideoRecorderManager;
     private AudioRecorderManager mAudioRecorderManager;
@@ -81,12 +76,15 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
         setCameraPreviewSize();
 
         mStreamer = new FFMpegStreamer();
-        mStreamer.setLogPath(FileUtils.getMoveFilePath("av_log" + System.currentTimeMillis()+".txt"));
-                mStreamer.init(RTMP_URL, mImageWidth, mImageHeight, mFrameRate, mAudioSample, mAudioChannelLayout);
+        mStreamer.setLogPath(FileUtils.getMoveFilePath("av_log" + System.currentTimeMillis() + ".txt"));
+
+
+        mStreamer.init(URL, mImageWidth, mImageHeight, mFrameRate, TARGET_AUDIO_SAMPLE, (TARGET_AUDIO_CHANNEL_LAYOUT == AudioFormat.CHANNEL_IN_MONO ? 1 : 2));
+
         mStreamer.prepair();
 
         mVideoRecorderManager = new VideoRecorderManager(mCamera, mStreamer);
-        mAudioRecorderManager = new AudioRecorderManager(mStreamer, mAudioSample);
+        mAudioRecorderManager = new AudioRecorderManager(mStreamer);
 
         mVideoRecorderManager.init();
         mAudioRecorderManager.init();
@@ -388,8 +386,6 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
 
         private int mAudioBufferSize;
 
-        private int mSampleRateInHz;
-
         private FFMpegStreamer mStreamer;
 
         private Thread mStreamerThread;
@@ -452,20 +448,19 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
             return String.format("%16s", Integer.toBinaryString(value & 0xFFFF)).replace(' ', '0') + " [" + value + "]";
         }
 
-        public AudioRecorderManager(FFMpegStreamer streamer, int sampleRateInHz) {
+        public AudioRecorderManager(FFMpegStreamer streamer) {
             mStreamer = streamer;
-            mSampleRateInHz = sampleRateInHz;
         }
 
         public void init() {
             Log.v(TAG, "init");
 
-            mAsynHandler = new AsynStreamerHandler("AudioStreamerTask",mStreamer);
+            mAsynHandler = new AsynStreamerHandler("AudioStreamerTask", mStreamer);
 
-            mAudioBufferSize = AudioRecord.getMinBufferSize(mSampleRateInHz, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT);
+            mAudioBufferSize = AudioRecord.getMinBufferSize(TARGET_AUDIO_SAMPLE, TARGET_AUDIO_CHANNEL_LAYOUT, TARGET_AUDIO_FORMAT);
             Log.v(TAG, "\t audioBufferSize is -> " + mAudioBufferSize);
 
-            mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, mSampleRateInHz, AudioFormat.CHANNEL_IN_STEREO, AudioFormat.ENCODING_PCM_16BIT, mAudioBufferSize);
+            mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, TARGET_AUDIO_SAMPLE, TARGET_AUDIO_CHANNEL_LAYOUT, TARGET_AUDIO_FORMAT, mAudioBufferSize);
 
 
         }

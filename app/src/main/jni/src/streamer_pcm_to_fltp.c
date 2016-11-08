@@ -86,7 +86,7 @@ int streamer_pcm_to_fltp_init(enum AVSampleFormat srcSampleFormat,
     src_nb_channels = av_get_channel_layout_nb_channels(src_ch_layout);
 
 
-    LOGV("allocating src memory ...");
+    LOGV("allocating src memory ...");  // ??? how ?
     ret = av_samples_alloc_array_and_samples(&src_data, &src_linesize, src_nb_channels,
                                              srcNbSamples, src_sample_fmt, 0);
 
