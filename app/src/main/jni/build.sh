@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #This is shell for ndk-building
 
-ndk-build NDK_LOG=1 \
+ndk-build -v NDK_LOG=1 \
         -B \
         NDK_PROJECT_PATH=null \
         APP_BUILD_SCRIPT=./Android.mk \
