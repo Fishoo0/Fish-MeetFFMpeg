@@ -4,9 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
-public class MainActivity extends Activity {
+import volador.retrofit.HelloRetrofitActivity;
+
+public class MainActivity extends Activity implements View.OnClickListener {
 
 
     static final String TAG = "Lesson-MainActivity111";
@@ -17,16 +18,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        TextView textView = (TextView) findViewById(R.id.textview);
-
-
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this ,CameraStreamerActivity.class));
-            }
-        });
 
 //        NDKUtils jni = new NDKUtils();
 //
@@ -55,5 +46,18 @@ public class MainActivity extends Activity {
 //
 //        Toast.makeText(this,""+result,Toast.LENGTH_SHORT).show();
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ffmpeg:
+                startActivity(new Intent(MainActivity.this, CameraStreamerActivity.class));
+                break;
+
+            case R.id.retrofit:
+                startActivity(new Intent(MainActivity.this, HelloRetrofitActivity.class));
+                break;
+        }
     }
 }

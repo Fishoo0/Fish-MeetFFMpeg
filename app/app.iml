@@ -90,13 +90,18 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="artoolkitplus-2.3.1-1.1" level="project" />
+    <orderEntry type="library" exported="" name="okio-1.8.0" level="project" />
     <orderEntry type="library" exported="" name="javacpp-1.1" level="project" />
     <orderEntry type="library" exported="" name="opencv-3.0.0-1.1" level="project" />
     <orderEntry type="library" exported="" name="videoinput-0.200-1.1" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.7" level="project" />
+    <orderEntry type="library" exported="" name="retrofit-2.1.0" level="project" />
+    <orderEntry type="library" exported="" name="converter-gson-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="libdc1394-2.2.3-1.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.1.1" level="project" />
-    <orderEntry type="library" exported="" name="ffmpeg-2.8.1-1.1" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-3.3.0" level="project" />
     <orderEntry type="library" exported="" name="libfreenect-0.5.3-1.1" level="project" />
+    <orderEntry type="library" exported="" name="ffmpeg-2.8.1-1.1" level="project" />
     <orderEntry type="library" exported="" name="flycapture-2.8.3.1-1.1" level="project" />
     <orderEntry type="library" exported="" name="flandmark-1.07-1.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.1.1" level="project" />

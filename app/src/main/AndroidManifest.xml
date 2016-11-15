@@ -41,6 +41,9 @@
         <activity
             android:name=".CameraStreamerActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="volador.retrofit.HelloRetrofitActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
