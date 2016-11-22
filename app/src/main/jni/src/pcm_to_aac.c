@@ -116,6 +116,8 @@ int main(int argc, char* argv[])
         printf("Failed to open encoder!\n");
         return -1;
     }
+
+
     pFrame = av_frame_alloc();
     pFrame->nb_samples= pCodecCtx->frame_size;
     pFrame->format= pCodecCtx->sample_fmt;

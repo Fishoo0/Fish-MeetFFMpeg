@@ -40,6 +40,14 @@
 #include <libavutil/mathematics.h>
 #include <libavutil/samplefmt.h>
 
+#include "../../../include/libavutil/opt.h"
+#include "../../../include/libavcodec/avcodec.h"
+#include "../../../include/libavutil/channel_layout.h"
+#include "../../../include/libavutil/common.h"
+#include "../../../include/libavutil/imgutils.h"
+#include "../../../include/libavutil/mathematics.h"
+#include "../../../include/libavutil/samplefmt.h"
+
 #define INBUF_SIZE 4096
 #define AUDIO_INBUF_SIZE 20480
 #define AUDIO_REFILL_THRESH 4096

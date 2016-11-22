@@ -31,8 +31,8 @@ import android.hardware.*;
 import android.content.pm.ActivityInfo;
 
 /**
-    SDL Activity
-*/
+ * SDL Activity
+ */
 public class SDLActivity extends Activity {
     private static final String TAG = "SDL";
 
@@ -40,7 +40,9 @@ public class SDLActivity extends Activity {
     public static boolean mIsPaused, mIsSurfaceReady, mHasFocus;
     public static boolean mExitCalledFromJava;
 
-    /** If shared libraries (e.g. SDL or the native application) could not be loaded. */
+    /**
+     * If shared libraries (e.g. SDL or the native application) could not be loaded.
+     */
     public static boolean mBrokenLibraries;
 
     // If we want to separate mouse and touch events.
@@ -66,31 +68,33 @@ public class SDLActivity extends Activity {
      * The default implementation returns the defaults. It never returns null.
      * An array returned by a new implementation must at least contain "SDL2".
      * Also keep in mind that the order the libraries are loaded may matter.
+     *
      * @return names of shared libraries to be loaded (e.g. "SDL2", "main").
      */
     protected String[] getLibraries() {
-        return new String[] {
-            "SDL2",
-            // "SDL2_image",
-            // "SDL2_mixer",
-            // "SDL2_net",
-            // "SDL2_ttf",
+        return new String[]{
+                "SDL2",
+                // "SDL2_image",
+                // "SDL2_mixer",
+                // "SDL2_net",
+                // "SDL2_ttf",
 //            "main"
-                "demoffmpeg"
+//                "demoffmpeg"
         };
     }
 
     // Load the .so
     public void loadLibraries() {
-       for (String lib : getLibraries()) {
-          System.loadLibrary(lib);
-       }
+        for (String lib : getLibraries()) {
+            System.loadLibrary(lib);
+        }
     }
 
     /**
      * This method is called by SDL before starting the native application thread.
      * It can be overridden to provide the arguments after the application name.
      * The default implementation returns an empty array. It never returns null.
+     *
      * @return arguments for the native application.
      */
     protected String[] getArguments() {
@@ -130,45 +134,43 @@ public class SDLActivity extends Activity {
         String errorMsgBrokenLib = "";
         try {
             loadLibraries();
-        } catch(UnsatisfiedLinkError e) {
+        } catch (UnsatisfiedLinkError e) {
             System.err.println(e.getMessage());
             mBrokenLibraries = true;
             errorMsgBrokenLib = e.getMessage();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println(e.getMessage());
             mBrokenLibraries = true;
             errorMsgBrokenLib = e.getMessage();
         }
 
-        if (mBrokenLibraries)
-        {
-            AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+        if (mBrokenLibraries) {
+            AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
             dlgAlert.setMessage("An error occurred while trying to start the application. Please try again and/or reinstall."
-                  + System.getProperty("line.separator")
-                  + System.getProperty("line.separator")
-                  + "Error: " + errorMsgBrokenLib);
+                    + System.getProperty("line.separator")
+                    + System.getProperty("line.separator")
+                    + "Error: " + errorMsgBrokenLib);
             dlgAlert.setTitle("SDL Error");
             dlgAlert.setPositiveButton("Exit",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,int id) {
-                        // if this button is clicked, close current activity
-                        SDLActivity.mSingleton.finish();
-                    }
-                });
-           dlgAlert.setCancelable(false);
-           dlgAlert.create().show();
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close current activity
+                            SDLActivity.mSingleton.finish();
+                        }
+                    });
+            dlgAlert.setCancelable(false);
+            dlgAlert.create().show();
 
-           return;
+            return;
         }
 
         // Set up the surface
         mSurface = new SDLSurface(getApplication());
 
-        if(Build.VERSION.SDK_INT >= 12) {
+        if (Build.VERSION.SDK_INT >= 12) {
             mJoystickHandler = new SDLJoystickHandler_API12();
-        }
-        else {
+        } else {
             mJoystickHandler = new SDLJoystickHandler();
         }
 
@@ -176,7 +178,7 @@ public class SDLActivity extends Activity {
         mLayout.addView(mSurface);
 
         setContentView(mLayout);
-        
+
         // Get filename from "Open with" of another application
         Intent intent = getIntent();
 
@@ -196,7 +198,7 @@ public class SDLActivity extends Activity {
         super.onPause();
 
         if (SDLActivity.mBrokenLibraries) {
-           return;
+            return;
         }
 
         SDLActivity.handlePause();
@@ -208,7 +210,7 @@ public class SDLActivity extends Activity {
         super.onResume();
 
         if (SDLActivity.mBrokenLibraries) {
-           return;
+            return;
         }
 
         SDLActivity.handleResume();
@@ -221,7 +223,7 @@ public class SDLActivity extends Activity {
         Log.v(TAG, "onWindowFocusChanged(): " + hasFocus);
 
         if (SDLActivity.mBrokenLibraries) {
-           return;
+            return;
         }
 
         SDLActivity.mHasFocus = hasFocus;
@@ -236,7 +238,7 @@ public class SDLActivity extends Activity {
         super.onLowMemory();
 
         if (SDLActivity.mBrokenLibraries) {
-           return;
+            return;
         }
 
         SDLActivity.nativeLowMemory();
@@ -247,10 +249,10 @@ public class SDLActivity extends Activity {
         Log.v(TAG, "onDestroy()");
 
         if (SDLActivity.mBrokenLibraries) {
-           super.onDestroy();
-           // Reset everything in case the user re opens the app
-           SDLActivity.initialize();
-           return;
+            super.onDestroy();
+            // Reset everything in case the user re opens the app
+            SDLActivity.initialize();
+            return;
         }
 
         // Send a quit message to the application
@@ -261,7 +263,7 @@ public class SDLActivity extends Activity {
         if (SDLActivity.mSDLThread != null) {
             try {
                 SDLActivity.mSDLThread.join();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.v(TAG, "Problem stopping thread: " + e);
             }
             SDLActivity.mSDLThread = null;
@@ -278,25 +280,26 @@ public class SDLActivity extends Activity {
     public boolean dispatchKeyEvent(KeyEvent event) {
 
         if (SDLActivity.mBrokenLibraries) {
-           return false;
+            return false;
         }
 
         int keyCode = event.getKeyCode();
         // Ignore certain special keys so they're handled by Android
         if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
-            keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
-            keyCode == KeyEvent.KEYCODE_CAMERA ||
-            keyCode == 168 || /* API 11: KeyEvent.KEYCODE_ZOOM_IN */
-            keyCode == 169 /* API 11: KeyEvent.KEYCODE_ZOOM_OUT */
-            ) {
+                keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+                keyCode == KeyEvent.KEYCODE_CAMERA ||
+                keyCode == 168 || /* API 11: KeyEvent.KEYCODE_ZOOM_IN */
+                keyCode == 169 /* API 11: KeyEvent.KEYCODE_ZOOM_OUT */
+                ) {
             return false;
         }
         return super.dispatchKeyEvent(event);
     }
 
-    /** Called by onPause or surfaceDestroyed. Even if surfaceDestroyed
-     *  is the first to be called, mIsSurfaceReady should still be set
-     *  to 'true' during the call to onPause (in a usual scenario).
+    /**
+     * Called by onPause or surfaceDestroyed. Even if surfaceDestroyed
+     * is the first to be called, mIsSurfaceReady should still be set
+     * to 'true' during the call to onPause (in a usual scenario).
      */
     public static void handlePause() {
         if (!SDLActivity.mIsPaused && SDLActivity.mIsSurfaceReady) {
@@ -306,7 +309,8 @@ public class SDLActivity extends Activity {
         }
     }
 
-    /** Called by onResume or surfaceCreated. An actual resume should be done only when the surface is ready.
+    /**
+     * Called by onResume or surfaceCreated. An actual resume should be done only when the surface is ready.
      * Note: Some Android variants may send multiple surfaceChanged events, so we don't need to resume
      * every time we get one of those events, only if it comes after surfaceDestroyed
      */
@@ -337,8 +341,9 @@ public class SDLActivity extends Activity {
      * This method is called by SDL if SDL did not handle a message itself.
      * This happens if a received message contains an unsupported command.
      * Method can be overwritten to handle Messages in a different class.
+     *
      * @param command the command of the message.
-     * @param param the parameter of the message. May be null.
+     * @param param   the parameter of the message. May be null.
      * @return if the message was handled in overridden method.
      */
     protected boolean onUnhandledMessage(int command, Object param) {
@@ -359,37 +364,36 @@ public class SDLActivity extends Activity {
                 return;
             }
             switch (msg.arg1) {
-            case COMMAND_CHANGE_TITLE:
-                if (context instanceof Activity) {
-                    ((Activity) context).setTitle((String)msg.obj);
-                } else {
-                    Log.e(TAG, "error handling message, getContext() returned no Activity");
-                }
-                break;
-            case COMMAND_TEXTEDIT_HIDE:
-                if (mTextEdit != null) {
-                    mTextEdit.setVisibility(View.GONE);
-
-                    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mTextEdit.getWindowToken(), 0);
-                }
-                break;
-            case COMMAND_SET_KEEP_SCREEN_ON:
-            {
-                Window window = ((Activity) context).getWindow();
-                if (window != null) {
-                    if ((msg.obj instanceof Integer) && (((Integer) msg.obj).intValue() != 0)) {
-                        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                case COMMAND_CHANGE_TITLE:
+                    if (context instanceof Activity) {
+                        ((Activity) context).setTitle((String) msg.obj);
                     } else {
-                        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        Log.e(TAG, "error handling message, getContext() returned no Activity");
                     }
+                    break;
+                case COMMAND_TEXTEDIT_HIDE:
+                    if (mTextEdit != null) {
+                        mTextEdit.setVisibility(View.GONE);
+
+                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mTextEdit.getWindowToken(), 0);
+                    }
+                    break;
+                case COMMAND_SET_KEEP_SCREEN_ON: {
+                    Window window = ((Activity) context).getWindow();
+                    if (window != null) {
+                        if ((msg.obj instanceof Integer) && (((Integer) msg.obj).intValue() != 0)) {
+                            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        } else {
+                            window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                        }
+                    }
+                    break;
                 }
-                break;
-            }
-            default:
-                if ((context instanceof SDLActivity) && !((SDLActivity) context).onUnhandledMessage(msg.arg1, msg.obj)) {
-                    Log.e(TAG, "error handling message, command is " + msg.arg1);
-                }
+                default:
+                    if ((context instanceof SDLActivity) && !((SDLActivity) context).onUnhandledMessage(msg.arg1, msg.obj)) {
+                        Log.e(TAG, "error handling message, command is " + msg.arg1);
+                    }
             }
         }
     }
@@ -407,32 +411,53 @@ public class SDLActivity extends Activity {
 
     // C functions we call
     public static native int nativeInit(Object arguments);
+
     public static native void nativeLowMemory();
+
     public static native void nativeQuit();
+
     public static native void nativePause();
+
     public static native void nativeResume();
+
     public static native void onNativeDropFile(String filename);
+
     public static native void onNativeResize(int x, int y, int format, float rate);
+
     public static native int onNativePadDown(int device_id, int keycode);
+
     public static native int onNativePadUp(int device_id, int keycode);
+
     public static native void onNativeJoy(int device_id, int axis,
                                           float value);
+
     public static native void onNativeHat(int device_id, int hat_id,
                                           int x, int y);
+
     public static native void onNativeKeyDown(int keycode);
+
     public static native void onNativeKeyUp(int keycode);
+
     public static native void onNativeKeyboardFocusLost();
+
     public static native void onNativeMouse(int button, int action, float x, float y);
+
     public static native void onNativeTouch(int touchDevId, int pointerFingerId,
                                             int action, float x,
                                             float y, float p);
+
     public static native void onNativeAccel(float x, float y, float z);
+
     public static native void onNativeSurfaceChanged();
+
     public static native void onNativeSurfaceDestroyed();
+
     public static native int nativeAddJoystick(int device_id, String name,
                                                int is_accelerometer, int nbuttons,
                                                int naxes, int nhats, int nballs);
+
     public static native int nativeRemoveJoystick(int device_id);
+
     public static native String nativeGetHint(String name);
 
     /**
@@ -459,6 +484,7 @@ public class SDLActivity extends Activity {
 
     /**
      * This method is called by SDL using JNI.
+     *
      * @return result of getSystemService(name) but executed on UI thread.
      */
     public Object getSystemServiceFromUiThread(final String name) {
@@ -589,7 +615,7 @@ public class SDLActivity extends Activity {
             } else if (result == 0) {
                 try {
                     Thread.sleep(1);
-                } catch(InterruptedException e) {
+                } catch (InterruptedException e) {
                     // Nom nom
                 }
             } else {
@@ -610,7 +636,7 @@ public class SDLActivity extends Activity {
             } else if (result == 0) {
                 try {
                     Thread.sleep(1);
-                } catch(InterruptedException e) {
+                } catch (InterruptedException e) {
                     // Nom nom
                 }
             } else {
@@ -634,6 +660,7 @@ public class SDLActivity extends Activity {
 
     /**
      * This method is called by SDL using JNI.
+     *
      * @return an array which may be empty but is never null.
      */
     public static int[] inputGetInputDeviceIds(int sources) {
@@ -665,14 +692,19 @@ public class SDLActivity extends Activity {
 
     // APK expansion files support
 
-    /** com.android.vending.expansion.zipfile.ZipResourceFile object or null. */
+    /**
+     * com.android.vending.expansion.zipfile.ZipResourceFile object or null.
+     */
     private Object expansionFile;
 
-    /** com.android.vending.expansion.zipfile.ZipResourceFile's getInputStream() or null. */
+    /**
+     * com.android.vending.expansion.zipfile.ZipResourceFile's getInputStream() or null.
+     */
     private Method expansionFileMethod;
 
     /**
      * This method was called by SDL using JNI.
+     *
      * @deprecated because of an incorrect name
      */
     @Deprecated
@@ -682,6 +714,7 @@ public class SDLActivity extends Activity {
 
     /**
      * This method is called by SDL using JNI.
+     *
      * @return an InputStream on success or null if no expansion file was used.
      * @throws IOException on errors. Message is set for the SDL error message.
      */
@@ -711,11 +744,11 @@ public class SDLActivity extends Activity {
                 // To avoid direct dependency on Google APK expansion library that is
                 // not a part of Android SDK we access it using reflection
                 expansionFile = Class.forName("com.android.vending.expansion.zipfile.APKExpansionSupport")
-                    .getMethod("getAPKExpansionZipFile", Context.class, int.class, int.class)
-                    .invoke(null, this, mainVersion, patchVersion);
+                        .getMethod("getAPKExpansionZipFile", Context.class, int.class, int.class)
+                        .invoke(null, this, mainVersion, patchVersion);
 
                 expansionFileMethod = expansionFile.getClass()
-                    .getMethod("getInputStream", String.class);
+                        .getMethod("getInputStream", String.class);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 expansionFile = null;
@@ -727,7 +760,7 @@ public class SDLActivity extends Activity {
         // Get an input stream for a known file inside the expansion file ZIPs
         InputStream fileStream;
         try {
-            fileStream = (InputStream)expansionFileMethod.invoke(expansionFile, fileName);
+            fileStream = (InputStream) expansionFileMethod.invoke(expansionFile, fileName);
         } catch (Exception ex) {
             // calling "getInputStream" failed
             ex.printStackTrace();
@@ -744,20 +777,25 @@ public class SDLActivity extends Activity {
 
     // Messagebox
 
-    /** Result of current messagebox. Also used for blocking the calling thread. */
+    /**
+     * Result of current messagebox. Also used for blocking the calling thread.
+     */
     protected final int[] messageboxSelection = new int[1];
 
-    /** Id of current dialog. */
+    /**
+     * Id of current dialog.
+     */
     protected int dialogs = 0;
 
     /**
      * This method is called by SDL using JNI.
      * Shows the messagebox from UI thread and block calling thread.
      * buttonFlags, buttonIds and buttonTexts must have same length.
+     *
      * @param buttonFlags array containing flags for every button.
-     * @param buttonIds array containing id for every button.
+     * @param buttonIds   array containing id for every button.
      * @param buttonTexts array containing text for every button.
-     * @param colors null for default or array of length 5 containing colors.
+     * @param colors      null for default or array of length 5 containing colors.
      * @return button id or -1.
      */
     public int messageboxShowMessageBox(
@@ -949,27 +987,25 @@ public class SDLActivity extends Activity {
 }
 
 /**
-    Simple nativeInit() runnable
-*/
+ * Simple nativeInit() runnable
+ */
 class SDLMain implements Runnable {
     @Override
     public void run() {
-        // Runs SDL_main()
         SDLActivity.nativeInit(SDLActivity.mSingleton.getArguments());
-
         //Log.v("SDL", "SDL thread terminated");
     }
 }
 
 
 /**
-    SDLSurface. This is what we draw on, so we need to know when it's created
-    in order to do anything useful.
-
-    Because of this, that's where we set up the SDL thread
-*/
+ * SDLSurface. This is what we draw on, so we need to know when it's created
+ * in order to do anything useful.
+ * <p>
+ * Because of this, that's where we set up the SDL thread
+ */
 class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
-    View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
+        View.OnKeyListener, View.OnTouchListener, SensorEventListener {
 
     // Sensors
     protected static SensorManager mSensorManager;
@@ -989,10 +1025,10 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         setOnKeyListener(this);
         setOnTouchListener(this);
 
-        mDisplay = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-        mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+        mDisplay = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
-        if(Build.VERSION.SDK_INT >= 12) {
+        if (Build.VERSION.SDK_INT >= 12) {
             setOnGenericMotionListener(new SDLGenericMotionListener_API12());
         }
 
@@ -1043,47 +1079,47 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 
         int sdlFormat = 0x15151002; // SDL_PIXELFORMAT_RGB565 by default
         switch (format) {
-        case PixelFormat.A_8:
-            Log.v("SDL", "pixel format A_8");
-            break;
-        case PixelFormat.LA_88:
-            Log.v("SDL", "pixel format LA_88");
-            break;
-        case PixelFormat.L_8:
-            Log.v("SDL", "pixel format L_8");
-            break;
-        case PixelFormat.RGBA_4444:
-            Log.v("SDL", "pixel format RGBA_4444");
-            sdlFormat = 0x15421002; // SDL_PIXELFORMAT_RGBA4444
-            break;
-        case PixelFormat.RGBA_5551:
-            Log.v("SDL", "pixel format RGBA_5551");
-            sdlFormat = 0x15441002; // SDL_PIXELFORMAT_RGBA5551
-            break;
-        case PixelFormat.RGBA_8888:
-            Log.v("SDL", "pixel format RGBA_8888");
-            sdlFormat = 0x16462004; // SDL_PIXELFORMAT_RGBA8888
-            break;
-        case PixelFormat.RGBX_8888:
-            Log.v("SDL", "pixel format RGBX_8888");
-            sdlFormat = 0x16261804; // SDL_PIXELFORMAT_RGBX8888
-            break;
-        case PixelFormat.RGB_332:
-            Log.v("SDL", "pixel format RGB_332");
-            sdlFormat = 0x14110801; // SDL_PIXELFORMAT_RGB332
-            break;
-        case PixelFormat.RGB_565:
-            Log.v("SDL", "pixel format RGB_565");
-            sdlFormat = 0x15151002; // SDL_PIXELFORMAT_RGB565
-            break;
-        case PixelFormat.RGB_888:
-            Log.v("SDL", "pixel format RGB_888");
-            // Not sure this is right, maybe SDL_PIXELFORMAT_RGB24 instead?
-            sdlFormat = 0x16161804; // SDL_PIXELFORMAT_RGB888
-            break;
-        default:
-            Log.v("SDL", "pixel format unknown " + format);
-            break;
+            case PixelFormat.A_8:
+                Log.v("SDL", "pixel format A_8");
+                break;
+            case PixelFormat.LA_88:
+                Log.v("SDL", "pixel format LA_88");
+                break;
+            case PixelFormat.L_8:
+                Log.v("SDL", "pixel format L_8");
+                break;
+            case PixelFormat.RGBA_4444:
+                Log.v("SDL", "pixel format RGBA_4444");
+                sdlFormat = 0x15421002; // SDL_PIXELFORMAT_RGBA4444
+                break;
+            case PixelFormat.RGBA_5551:
+                Log.v("SDL", "pixel format RGBA_5551");
+                sdlFormat = 0x15441002; // SDL_PIXELFORMAT_RGBA5551
+                break;
+            case PixelFormat.RGBA_8888:
+                Log.v("SDL", "pixel format RGBA_8888");
+                sdlFormat = 0x16462004; // SDL_PIXELFORMAT_RGBA8888
+                break;
+            case PixelFormat.RGBX_8888:
+                Log.v("SDL", "pixel format RGBX_8888");
+                sdlFormat = 0x16261804; // SDL_PIXELFORMAT_RGBX8888
+                break;
+            case PixelFormat.RGB_332:
+                Log.v("SDL", "pixel format RGB_332");
+                sdlFormat = 0x14110801; // SDL_PIXELFORMAT_RGB332
+                break;
+            case PixelFormat.RGB_565:
+                Log.v("SDL", "pixel format RGB_565");
+                sdlFormat = 0x15151002; // SDL_PIXELFORMAT_RGB565
+                break;
+            case PixelFormat.RGB_888:
+                Log.v("SDL", "pixel format RGB_888");
+                // Not sure this is right, maybe SDL_PIXELFORMAT_RGB24 instead?
+                sdlFormat = 0x16161804; // SDL_PIXELFORMAT_RGB888
+                break;
+            default:
+                Log.v("SDL", "pixel format unknown " + format);
+                break;
         }
 
         mWidth = width;
@@ -1091,39 +1127,36 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         SDLActivity.onNativeResize(width, height, sdlFormat, mDisplay.getRefreshRate());
         Log.v("SDL", "Window size: " + width + "x" + height);
 
- 
+
         boolean skip = false;
         int requestedOrientation = SDLActivity.mSingleton.getRequestedOrientation();
 
-        if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-        {
+        if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
             // Accept any
-        }
-        else if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        {
+        } else if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             if (mWidth > mHeight) {
-               skip = true;
+                skip = true;
             }
         } else if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             if (mWidth < mHeight) {
-               skip = true;
+                skip = true;
             }
         }
 
         // Special Patch for Square Resolution: Black Berry Passport
         if (skip) {
-           double min = Math.min(mWidth, mHeight);
-           double max = Math.max(mWidth, mHeight);
-           
-           if (max / min < 1.20) {
-              Log.v("SDL", "Don't skip on such aspect-ratio. Could be a square resolution.");
-              skip = false;
-           }
+            double min = Math.min(mWidth, mHeight);
+            double max = Math.max(mWidth, mHeight);
+
+            if (max / min < 1.20) {
+                Log.v("SDL", "Don't skip on such aspect-ratio. Could be a square resolution.");
+                skip = false;
+            }
         }
 
         if (skip) {
-           Log.v("SDL", "Skip .. Surface is not ready.");
-           return;
+            Log.v("SDL", "Skip .. Surface is not ready.");
+            return;
         }
 
 
@@ -1142,16 +1175,15 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             sdlThread.start();
 
             // Set up a listener thread to catch when the native thread ends
-            SDLActivity.mSDLThread = new Thread(new Runnable(){
+            SDLActivity.mSDLThread = new Thread(new Runnable() {
                 @Override
-                public void run(){
+                public void run() {
                     try {
                         sdlThread.join();
-                    }
-                    catch(Exception e){}
-                    finally{
+                    } catch (Exception e) {
+                    } finally {
                         // Native thread has finished
-                        if (! SDLActivity.mExitCalledFromJava) {
+                        if (!SDLActivity.mExitCalledFromJava) {
                             SDLActivity.handleNativeExit();
                         }
                     }
@@ -1167,13 +1199,13 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 
     // Key events
     @Override
-    public boolean onKey(View  v, int keyCode, KeyEvent event) {
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
         // Dispatch the different events depending on where they come from
         // Some SOURCE_DPAD or SOURCE_GAMEPAD are also SOURCE_KEYBOARD
         // So, we try to process them as DPAD or GAMEPAD events first, if that fails we try them as KEYBOARD
 
-        if ( (event.getSource() & InputDevice.SOURCE_GAMEPAD) != 0 ||
-                   (event.getSource() & InputDevice.SOURCE_DPAD) != 0 ) {
+        if ((event.getSource() & InputDevice.SOURCE_GAMEPAD) != 0 ||
+                (event.getSource() & InputDevice.SOURCE_DPAD) != 0) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 if (SDLActivity.onNativePadDown(event.getDeviceId(), keyCode) == 0) {
                     return true;
@@ -1185,13 +1217,12 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             }
         }
 
-        if( (event.getSource() & InputDevice.SOURCE_KEYBOARD) != 0) {
+        if ((event.getSource() & InputDevice.SOURCE_KEYBOARD) != 0) {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 //Log.v("SDL", "key down: " + keyCode);
                 SDLActivity.onNativeKeyDown(keyCode);
                 return true;
-            }
-            else if (event.getAction() == KeyEvent.ACTION_UP) {
+            } else if (event.getAction() == KeyEvent.ACTION_UP) {
                 //Log.v("SDL", "key up: " + keyCode);
                 SDLActivity.onNativeKeyUp(keyCode);
                 return true;
@@ -1211,7 +1242,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         int pointerFingerId;
         int mouseButton;
         int i = -1;
-        float x,y,p;
+        float x, y, p;
 
         // !!! FIXME: dump this SDK check after 2.0.4 ships and require API14.
         if (event.getSource() == InputDevice.SOURCE_MOUSE && SDLActivity.mSeparateMouseAndTouch) {
@@ -1220,13 +1251,13 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
             } else {
                 try {
                     mouseButton = (Integer) event.getClass().getMethod("getButtonState").invoke(event);
-                } catch(Exception e) {
+                } catch (Exception e) {
                     mouseButton = 1;    // oh well.
                 }
             }
             SDLActivity.onNativeMouse(mouseButton, action, event.getX(0), event.getY(0));
         } else {
-            switch(action) {
+            switch (action) {
                 case MotionEvent.ACTION_MOVE:
                     for (i = 0; i < pointerCount; i++) {
                         pointerFingerId = event.getPointerId(i);
@@ -1286,18 +1317,18 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         }
 
         return true;
-   }
+    }
 
     // Sensor events
     public void enableSensor(int sensortype, boolean enabled) {
         // TODO: This uses getDefaultSensor - what if we have >1 accels?
         if (enabled) {
             mSensorManager.registerListener(this,
-                            mSensorManager.getDefaultSensor(sensortype),
-                            SensorManager.SENSOR_DELAY_GAME, null);
+                    mSensorManager.getDefaultSensor(sensortype),
+                    SensorManager.SENSOR_DELAY_GAME, null);
         } else {
             mSensorManager.unregisterListener(this,
-                            mSensorManager.getDefaultSensor(sensortype));
+                    mSensorManager.getDefaultSensor(sensortype));
         }
     }
 
@@ -1329,8 +1360,8 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
                     break;
             }
             SDLActivity.onNativeAccel(-x / SensorManager.GRAVITY_EARTH,
-                                      y / SensorManager.GRAVITY_EARTH,
-                                      event.values[2] / SensorManager.GRAVITY_EARTH - 1);
+                    y / SensorManager.GRAVITY_EARTH,
+                    event.values[2] / SensorManager.GRAVITY_EARTH - 1);
         }
     }
 }
@@ -1377,14 +1408,14 @@ class DummyEdit extends View implements View.OnKeyListener {
 
     //
     @Override
-    public boolean onKeyPreIme (int keyCode, KeyEvent event) {
+    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         // As seen on StackOverflow: http://stackoverflow.com/questions/7634346/keyboard-hide-event
         // FIXME: Discussion at http://bugzilla.libsdl.org/show_bug.cgi?id=1639
         // FIXME: This is not a 100% effective solution to the problem of detecting if the keyboard is showing or not
         // FIXME: A more effective solution would be to change our Layout from AbsoluteLayout to Relative or Linear
         // FIXME: And determine the keyboard presence doing this: http://stackoverflow.com/questions/2150078/how-to-check-visibility-of-software-keyboard-in-android
         // FIXME: An even more effective way would be if Android provided this out of the box, but where would the fun be in that :)
-        if (event.getAction()==KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
             if (SDLActivity.mTextEdit != null && SDLActivity.mTextEdit.getVisibility() == View.VISIBLE) {
                 SDLActivity.onNativeKeyboardFocusLost();
             }
@@ -1459,7 +1490,7 @@ class SDLInputConnection extends BaseInputConnection {
         if (beforeLength == 1 && afterLength == 0) {
             // backspace
             return super.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL))
-                && super.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
+                    && super.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
         }
 
         return super.deleteSurroundingText(beforeLength, afterLength);
@@ -1471,6 +1502,7 @@ class SDLJoystickHandler {
 
     /**
      * Handles given MotionEvent.
+     *
      * @param event the event to be handled.
      * @return if given event was processed.
      */
@@ -1494,6 +1526,7 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
         public ArrayList<InputDevice.MotionRange> axes;
         public ArrayList<InputDevice.MotionRange> hats;
     }
+
     static class RangeComparator implements Comparator<InputDevice.MotionRange> {
         @Override
         public int compare(InputDevice.MotionRange arg0, InputDevice.MotionRange arg1) {
@@ -1516,18 +1549,17 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
         // so the first controller seen by SDL matches what the receiver
         // considers to be the first controller
 
-        for(int i=deviceIds.length-1; i>-1; i--) {
+        for (int i = deviceIds.length - 1; i > -1; i--) {
             SDLJoystick joystick = getJoystick(deviceIds[i]);
             if (joystick == null) {
                 joystick = new SDLJoystick();
                 InputDevice joystickDevice = InputDevice.getDevice(deviceIds[i]);
 
-                if ( 
-                      (joystickDevice.getSources() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0 
-                   ||
-                      (joystickDevice.getSources() & InputDevice.SOURCE_CLASS_BUTTON) != 0 
-                  )
-                {
+                if (
+                        (joystickDevice.getSources() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0
+                                ||
+                                (joystickDevice.getSources() & InputDevice.SOURCE_CLASS_BUTTON) != 0
+                        ) {
                     joystick.device_id = deviceIds[i];
                     joystick.name = joystickDevice.getName();
                     joystick.axes = new ArrayList<InputDevice.MotionRange>();
@@ -1535,13 +1567,12 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
 
                     List<InputDevice.MotionRange> ranges = joystickDevice.getMotionRanges();
                     Collections.sort(ranges, new RangeComparator());
-                    for (InputDevice.MotionRange range : ranges ) {
-                        if ((range.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0 ) {
+                    for (InputDevice.MotionRange range : ranges) {
+                        if ((range.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0) {
                             if (range.getAxis() == MotionEvent.AXIS_HAT_X ||
-                                range.getAxis() == MotionEvent.AXIS_HAT_Y) {
+                                    range.getAxis() == MotionEvent.AXIS_HAT_Y) {
                                 joystick.hats.add(range);
-                            }
-                            else {
+                            } else {
                                 joystick.axes.add(range);
                             }
                         }
@@ -1549,17 +1580,17 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
 
                     mJoysticks.add(joystick);
                     SDLActivity.nativeAddJoystick(joystick.device_id, joystick.name, 0, -1,
-                                                  joystick.axes.size(), joystick.hats.size()/2, 0);
+                            joystick.axes.size(), joystick.hats.size() / 2, 0);
                 }
             }
         }
 
         /* Check removed devices */
         ArrayList<Integer> removedDevices = new ArrayList<Integer>();
-        for(int i=0; i < mJoysticks.size(); i++) {
+        for (int i = 0; i < mJoysticks.size(); i++) {
             int device_id = mJoysticks.get(i).device_id;
             int j;
-            for (j=0; j < deviceIds.length; j++) {
+            for (j = 0; j < deviceIds.length; j++) {
                 if (device_id == deviceIds[j]) break;
             }
             if (j == deviceIds.length) {
@@ -1567,10 +1598,10 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
             }
         }
 
-        for(int i=0; i < removedDevices.size(); i++) {
+        for (int i = 0; i < removedDevices.size(); i++) {
             int device_id = removedDevices.get(i).intValue();
             SDLActivity.nativeRemoveJoystick(device_id);
-            for (int j=0; j < mJoysticks.size(); j++) {
+            for (int j = 0; j < mJoysticks.size(); j++) {
                 if (mJoysticks.get(j).device_id == device_id) {
                     mJoysticks.remove(j);
                     break;
@@ -1580,7 +1611,7 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
     }
 
     protected SDLJoystick getJoystick(int device_id) {
-        for(int i=0; i < mJoysticks.size(); i++) {
+        for (int i = 0; i < mJoysticks.size(); i++) {
             if (mJoysticks.get(i).device_id == device_id) {
                 return mJoysticks.get(i);
             }
@@ -1590,23 +1621,23 @@ class SDLJoystickHandler_API12 extends SDLJoystickHandler {
 
     @Override
     public boolean handleMotionEvent(MotionEvent event) {
-        if ( (event.getSource() & InputDevice.SOURCE_JOYSTICK) != 0) {
+        if ((event.getSource() & InputDevice.SOURCE_JOYSTICK) != 0) {
             int actionPointerIndex = event.getActionIndex();
             int action = event.getActionMasked();
-            switch(action) {
+            switch (action) {
                 case MotionEvent.ACTION_MOVE:
                     SDLJoystick joystick = getJoystick(event.getDeviceId());
-                    if ( joystick != null ) {
+                    if (joystick != null) {
                         for (int i = 0; i < joystick.axes.size(); i++) {
                             InputDevice.MotionRange range = joystick.axes.get(i);
                             /* Normalize the value to -1...1 */
-                            float value = ( event.getAxisValue( range.getAxis(), actionPointerIndex) - range.getMin() ) / range.getRange() * 2.0f - 1.0f;
-                            SDLActivity.onNativeJoy(joystick.device_id, i, value );
+                            float value = (event.getAxisValue(range.getAxis(), actionPointerIndex) - range.getMin()) / range.getRange() * 2.0f - 1.0f;
+                            SDLActivity.onNativeJoy(joystick.device_id, i, value);
                         }
-                        for (int i = 0; i < joystick.hats.size(); i+=2) {
-                            int hatX = Math.round(event.getAxisValue( joystick.hats.get(i).getAxis(), actionPointerIndex ) );
-                            int hatY = Math.round(event.getAxisValue( joystick.hats.get(i+1).getAxis(), actionPointerIndex ) );
-                            SDLActivity.onNativeHat(joystick.device_id, i/2, hatX, hatY );
+                        for (int i = 0; i < joystick.hats.size(); i += 2) {
+                            int hatX = Math.round(event.getAxisValue(joystick.hats.get(i).getAxis(), actionPointerIndex));
+                            int hatY = Math.round(event.getAxisValue(joystick.hats.get(i + 1).getAxis(), actionPointerIndex));
+                            SDLActivity.onNativeHat(joystick.device_id, i / 2, hatX, hatY);
                         }
                     }
                     break;
@@ -1625,7 +1656,7 @@ class SDLGenericMotionListener_API12 implements View.OnGenericMotionListener {
         float x, y;
         int action;
 
-        switch ( event.getSource() ) {
+        switch (event.getSource()) {
             case InputDevice.SOURCE_JOYSTICK:
             case InputDevice.SOURCE_GAMEPAD:
             case InputDevice.SOURCE_DPAD:

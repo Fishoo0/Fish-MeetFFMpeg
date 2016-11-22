@@ -10,6 +10,8 @@
 #include "libavformat/avformat.h"
 #include "libswscale/swscale.h"
 
+#include "my_log.h"
+
 
 
 // compatibility with newer API
@@ -204,7 +206,7 @@ JNIEXPORT int JNICALL Java_volador_demoffmpeg_NDKUtils_studyLesson1(JNIEnv *env,
                           pFrameRGB->data, pFrameRGB->linesize);
 
                 // Save the frame to disk
-                if(++i<=5)
+                if(++i<=50)
                     SaveFrame(outPicDir,pFrameRGB, pCodecCtx->width, pCodecCtx->height,
                               i);
             }

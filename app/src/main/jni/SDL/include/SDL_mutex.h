@@ -213,7 +213,7 @@ extern DECLSPEC int SDLCALL SDL_CondSignal(SDL_cond * cond);
  *
  *  \return 0 or -1 on error.
  */
-extern DECLSPEC int SDLCALL SDL_CondBroadcast(SDL_cond * cond);
+extern DECLSPEC int SDLCALL SDL_CondBroadcast (SDL_cond * cond);
 
 /**
  *  Wait on the condition variable, unlocking the provided mutex.

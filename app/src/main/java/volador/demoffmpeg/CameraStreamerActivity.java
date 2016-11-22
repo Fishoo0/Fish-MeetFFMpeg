@@ -45,8 +45,9 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
     private FFMpegStreamer mStreamer;
 
 
-    //    private static String URL = "rtmp://192.168.1.188:1935/fishdemo/fish";
-    private static String URL = FileUtils.getMoveFilePath("test.flv");
+    private static String URL = "rtmp://192.168.1.188:1935/fishdemo/fish";
+
+//    private static String URL = FileUtils.getMoveFilePath("test.flv");
 
     private VideoRecorderManager mVideoRecorderManager;
     private AudioRecorderManager mAudioRecorderManager;
@@ -61,7 +62,6 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
         mCameraTextureView = (CameraSurfaceView) findViewById(R.id.camera_texture_view);
 
         mCamera = Camera.open();
-//        mCamera.setPreviewCallback(this);
 
         setCameraDisplayOrientation(this, 0, mCamera);
 
@@ -234,7 +234,7 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
     private void startStreamer() {
         Log.v(TAG, "startStreamer");
         mVideoRecorderManager.start();
-//        mAudioRecorderManager.start();
+        mAudioRecorderManager.start();
 
         mStreamStatus = STREAM_STATUS_ING;
     }
@@ -243,7 +243,7 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
         Log.v(TAG, "stopStreamer");
 
         mVideoRecorderManager.stop();
-//        mAudioRecorderManager.stop();
+        mAudioRecorderManager.stop();
 
         mStreamer.pause();
 
@@ -287,18 +287,18 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
             mHasFlyPacket = false;
         }
 
-        public void setStreamer(FFMpegStreamer streamer) {
-            mStreamer = streamer;
-        }
-
-        public void postEncodeData(final byte[] data, int type) {
+        public void postEncodeData(final Object data, int type) {
             Log.v(TAG, "postEncodeData");
             if (!mHasFlyPacket) {
                 Log.v(TAG, "\t no fly packet , post encode task ...");
-                Message msg = Message.obtain();
-                msg.what = type;
-                msg.obj = data;
-                sendMessage(msg);
+                if(data instanceof Message) {
+                    sendMessage((Message)data);
+                } else {
+                    Message msg = Message.obtain();
+                    msg.what = type;
+                    msg.obj = data;
+                    sendMessage(msg);
+                }
             } else {
                 Log.w(TAG, "\t has flying packet ,skip this packet ");
             }
@@ -371,7 +371,6 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
             //default data format is YUV420sp (NV21)
 
             mVideoImageTask.postEncodeData(data, FFMpegStreamer.RAW_DATA_VIDEO);
-//        mCamera.setPreviewCallback(null);
         }
 
     }
@@ -426,10 +425,7 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
                         msg.what = FFMpegStreamer.RAW_DATA_AUDIO;
                         msg.obj = mAudioBuffer.array();
                         msg.arg1 = sampleCount;
-
-                        mAsynHandler.sendMessage(msg);
-
-//                        mSwitch = false;
+                        mAsynHandler.postEncodeData(msg,FFMpegStreamer.RAW_DATA_AUDIO);
 
                         Log.v(TAG, "\t encoding audio " + bufferReadResult + " ...");
                     } else {
@@ -459,6 +455,9 @@ public class CameraStreamerActivity extends Activity implements View.OnClickList
 
             mAudioBufferSize = AudioRecord.getMinBufferSize(TARGET_AUDIO_SAMPLE, TARGET_AUDIO_CHANNEL_LAYOUT, TARGET_AUDIO_FORMAT);
             Log.v(TAG, "\t audioBufferSize is -> " + mAudioBufferSize);
+
+
+            mAudioBufferSize = 1024 * 2;
 
             mAudioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, TARGET_AUDIO_SAMPLE, TARGET_AUDIO_CHANNEL_LAYOUT, TARGET_AUDIO_FORMAT, mAudioBufferSize);
 

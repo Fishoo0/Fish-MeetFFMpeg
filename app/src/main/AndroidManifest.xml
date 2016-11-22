@@ -41,6 +41,8 @@
         <activity
             android:name=".CameraStreamerActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name="volador.sdl.MySDLActivity" />
         <activity
             android:name="volador.retrofit.HelloRetrofitActivity"
             android:screenOrientation="portrait" />

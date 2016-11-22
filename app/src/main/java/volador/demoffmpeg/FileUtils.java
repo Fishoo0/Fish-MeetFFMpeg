@@ -28,9 +28,20 @@ public class FileUtils {
         return videoOut.getPath();
     }
 
+    public static String getMoveInternalDir(String dirName) {
+        File file = new File(videoDir, dirName);
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                return file.getPath();
+            }
+        }
+        file.mkdirs();
+        return file.getPath();
+    }
+
 
     public static File getMoveFile(String fileName) {
-        return new File(videoDir,fileName);
+        return new File(videoDir, fileName);
     }
 
     public static String getMoveFilePath(String fileName) {

@@ -27,18 +27,29 @@ extern "C" {
  */
 int streamer_pcm_to_fltp_init(enum AVSampleFormat srcSampleFormat,
                               enum AVSampleFormat dstSampleFormat,
-                              int64_t srcChLayout, int srcSampeRate ,int srcNbSamples);
+                              int64_t srcChLayout, int srcSampeRate, int srcNbSamples);
 
 /**
  * Converting data
  */
-uint8_t *streamer_pcm_to_fltp_convert(uint8_t *data, int srcNbSample, uint8_t *dst, int dstNbSample);
+uint8_t *streamer_pcm_to_fltp_convert(uint8_t *data, int srcNbSample, uint8_t *dst,
+                                      int dstNbSample);
 
 
 /*
  * Releasing data
  */
 int streamer_pcm_to_fltp_release();
+
+
+/**
+ * One method edition
+ */
+uint8_t *streamer_pcm_to_fltp_convert_new(enum AVSampleFormat srcSampleFormat,
+                                          enum AVSampleFormat dstSampleFormat,
+                                          int64_t srcChLayout, int srcSampeRate,
+                                          uint8_t *srcData, int srcNbSample,
+                                          uint8_t *dst);
 
 #ifdef __cplusplus
 }

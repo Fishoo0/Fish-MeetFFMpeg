@@ -57,6 +57,9 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 
+#include "../../SDL/include/SDL.h"
+#include "../../SDL/include/SDL_thread.h"
+
 #include "cmdutils.h"
 
 #include <assert.h>

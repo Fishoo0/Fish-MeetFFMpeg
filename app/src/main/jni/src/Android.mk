@@ -9,9 +9,10 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../SDL/include \
                         $(LOCAL_PATH)/../FFMpeg/include
 
 LOCAL_SRC_FILES := \
-                        volador_demoffmpeg_NDKUtils.cpp \
-                        streamer_pcm_to_fltp.c \
-                        streamer_android.c
+                        ../SDL/src/main/android/SDL_android_main.c\
+                        android_player.c \
+                        lesson1.c
+
 
 LOCAL_LDLIBS := -llog -ljnigraphics -lz -landroid -lm -pthread -lGLESv1_CM -lGLESv2
 

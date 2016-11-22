@@ -283,12 +283,12 @@ int init_output() {
         return -1;
     }
 
-//    LOGV("creating audio AVStream ...");
-//    out_audio_avstream = avformat_new_stream(out_format_ctx, NULL);
-//    if (!out_audio_avstream) {
-//        LOGE("failed creating audio outpout AVStream !!!");
-//        return -1;
-//    }
+    LOGV("creating audio AVStream ...");
+    out_audio_avstream = avformat_new_stream(out_format_ctx, NULL);
+    if (!out_audio_avstream) {
+        LOGE("failed creating audio outpout AVStream !!!");
+        return -1;
+    }
 
     LOGV(" :) finish init_output .");
 
@@ -387,12 +387,11 @@ int init_audio_encoder() {
     //Param that must set
     out_audio_codec_ctx = avcodec_alloc_context3(out_audio_codec);
 
-
     out_audio_codec_ctx->codec_id = AV_CODEC_ID_AAC;
     out_audio_codec_ctx->codec_type = AVMEDIA_TYPE_AUDIO;
 
     /**
-     * The stupid aac encoder only surport
+     * The stupid aac encoder only support
      */
     out_audio_codec_ctx->sample_fmt = AV_SAMPLE_FMT_FLTP;
 
@@ -414,7 +413,7 @@ int init_audio_encoder() {
 
     out_audio_codec_ctx->channels = av_get_channel_layout_nb_channels(
             out_audio_codec_ctx->channel_layout);
-    out_audio_codec_ctx->bit_rate = 30000;
+    out_audio_codec_ctx->bit_rate = 64000; // copied from pcm_to_aac.c
 
     /**
      * Some container formats (like MP4) require global headers to be present
@@ -427,11 +426,13 @@ int init_audio_encoder() {
 //    av_dump_format(out_format_ctx, 0, out_url, 1);
 
     out_audio_avstream->codec = out_audio_codec_ctx;
-    out_audio_avstream->time_base.num = 1;
-    out_audio_avstream->time_base.den = out_audio_codec_ctx->sample_rate;
+
+//    out_audio_avstream->time_base.num = 1;
+//    out_audio_avstream->time_base.den = out_audio_codec_ctx->sample_rate;
 
     LOGV("opening audio encoder ...");
-    int res = avcodec_open2(out_audio_codec_ctx, out_audio_codec, NULL);
+    int res = avcodec_open2(out_audio_codec_ctx, out_audio_codec,
+                            NULL);  // this method set out_audio_codec_ctx->frame_size
     if (res < 0) {
         LOGE("can not open audio encoder !!! code -> %d", res);
         return res;
@@ -456,10 +457,10 @@ int init_encoder() {
         return res;
     }
 
-//    res = init_audio_encoder();
-//    if (res) {
-//        return res;
-//    }
+    res = init_audio_encoder();
+    if (res) {
+        return res;
+    }
 
     LOGV("all encoders has been initialized & opened successfully .");
 
@@ -519,12 +520,19 @@ int init_audio_encode_key_params() {
 
     t_audio_frame = av_frame_alloc();
     t_audio_frame->nb_samples = out_audio_codec_ctx->frame_size;
+
+    LOGE("out_audio_codec_ctx->frame_size -> %d", out_audio_codec_ctx->frame_size);
+
+
     t_audio_frame->format = out_audio_codec_ctx->sample_fmt;
 
     LOGV("creating buffer for audio encoding ...");
     int buffer_size = av_samples_get_buffer_size(NULL, out_audio_codec_ctx->channels,
                                                  out_audio_codec_ctx->frame_size,
                                                  out_audio_codec_ctx->sample_fmt, 0);
+
+    LOGE("buffer_size -> %d", buffer_size);
+
     if (buffer_size < 0) {
         LOGE("can not getting buffer size for audio !!!");
         return buffer_size;
@@ -537,7 +545,7 @@ int init_audio_encode_key_params() {
     }
 
     int res = avcodec_fill_audio_frame(t_audio_frame, out_audio_codec_ctx->channels,
-                                       out_audio_codec_ctx->sample_fmt, (const uint8_t *) audio_buf,
+                                       out_audio_codec_ctx->sample_fmt, audio_buf,
                                        buffer_size, 0);
     if (res < 0) {
         LOGE("can not set audio frame !!!");
@@ -557,10 +565,10 @@ int init_encode_key_params() {
         return res;
     }
 
-//    res = init_audio_encode_key_params();
-//    if (res) {
-//        return res;
-//    }
+    res = init_audio_encode_key_params();
+    if (res) {
+        return res;
+    }
 
     return 0;
 }
@@ -594,16 +602,17 @@ int streamer_init(const unsigned char *outUrl, int width, int height, int frameR
     audio_sample_rate = audioSampleRate;
 
 
-    if(audioChannelLayout > 1 ) {
+    if (audioChannelLayout > 1) {
         audio_channel_layout = AV_CH_LAYOUT_STEREO;
-    } else{
+    } else {
         audio_channel_layout = AV_CH_LAYOUT_MONO;
     }
 
     audio_channel_layout = audioChannelLayout;
 
-    LOGV("\tURL:%s \n\tSize(width*height):%d*%d\n\tFrameRate:%d\n\tAudioSampleInHz:%d\n\tAudioChannelLayout:%d", outUrl,
-         width, height, frameRate, audioSampleRate,audioChannelLayout);
+    LOGV("\tURL:%s \n\tSize(width*height):%d*%d\n\tFrameRate:%d\n\tAudioSampleInHz:%d\n\tAudioChannelLayout:%d",
+         outUrl,
+         width, height, frameRate, audioSampleRate, audioChannelLayout);
 
     LOGV("regisster all ...");
     av_register_all();
@@ -636,8 +645,8 @@ int streamer_init(const unsigned char *outUrl, int width, int height, int frameR
         return on_error(res);
     }
 
-    res = streamer_pcm_to_fltp_init(AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_FLTP, audio_channel_layout,
-                                    audio_sample_rate ,2048);
+//    res = streamer_pcm_to_fltp_init(AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_FLTP, audio_channel_layout,
+//                                    audio_sample_rate ,2048);
     if (res) {
         return on_error(res);
     }
@@ -731,7 +740,12 @@ int streamer_encode_video(jbyte *data) {
 
         LOGV("start to writing video packet ...");
 
-        av_interleaved_write_frame(out_format_ctx, &t_encoded_packet);
+        t_encoded_packet.stream_index = out_video_avstream->index;
+
+        LOGE("out_video_avstream->index -> %d", out_video_avstream->index);
+
+//        av_interleaved_write_frame(out_format_ctx, &t_encoded_packet);
+            av_write_frame(out_format_ctx,&t_encoded_packet);
 
 //        free(data);
         av_free_packet(&t_encoded_packet);
@@ -814,8 +828,15 @@ int streamer_encode_audio(uint8_t *dataPCM16, int sampleCount) {
 
     int m = 0;
     for (m = 0; m < 16; m++) {
-        LOGV("value %dst is %x , "
-                     BYTETOBINARYPATTERN, m, dataPCM16[m], BYTETOBINARY(dataPCM16[m]));
+        LOGE("audio sample %dst is ", m);
+        LOGE("[addr+1 addr+0] %x %x  --  "
+                     BYTETOBINARYPATTERN
+                     ""
+                     BYTETOBINARYPATTERN, dataPCM16[m * 2 + 1], dataPCM16[m * 2 + 0],
+             BYTETOBINARY(dataPCM16[m * 2 + 1]), BYTETOBINARY(dataPCM16[m * 2 + 0]));
+
+//        LOGV("value %dst is %x , "
+//                     BYTETOBINARYPATTERN, m, dataPCM16[m], BYTETOBINARY(dataPCM16[m]));
     }
 
     int res = -1, got_output = 1;
@@ -823,7 +844,14 @@ int streamer_encode_audio(uint8_t *dataPCM16, int sampleCount) {
     LOGV("converting pcm to fltp");
 
     if (dataPCM16) {
-        data = streamer_pcm_to_fltp_convert(dataPCM16, sampleCount, data, sampleCount);
+//        data = streamer_pcm_to_fltp_convert(dataPCM16, sampleCount, data, sampleCount);
+
+
+        data = malloc(sampleCount * 4);
+        streamer_pcm_to_fltp_convert_new(AV_SAMPLE_FMT_S16, AV_SAMPLE_FMT_FLTP,
+                                         audio_channel_layout, audio_sample_rate,
+                                         dataPCM16, sampleCount,
+                                         data);
     }
 
 //    res = streamer_convert(AV_SAMPLE_FMT_FLTP, AV_SAMPLE_FMT_S16, AV_CH_LAYOUT_MONO,
@@ -836,10 +864,19 @@ int streamer_encode_audio(uint8_t *dataPCM16, int sampleCount) {
     }
 
     LOGV("printing converted audio data ... ");
+    uint8_t *result = data;
     for (m = 0; m < 16; m++) {
-        LOGV("res value %dst is %x", m, data[m]);
+        LOGD("[addr+0 addr+1 addr+2 addr+3] %x %x %x %x  --  "
+                     BYTETOBINARYPATTERN
+                     ""
+                     BYTETOBINARYPATTERN
+                     ""
+                     BYTETOBINARYPATTERN
+                     ""
+                     BYTETOBINARYPATTERN, result[m * 4 + 0], result[m * 4 + 1], result[m * 4 + 2],
+             result[m * 4 + 3], BYTETOBINARY(result[m * 4 + 0]), BYTETOBINARY(result[m * 4 + 1]),
+             BYTETOBINARY(result[m * 4 + 2]), BYTETOBINARY(result[m * 4 + 3]));
     }
-
 
 
     LOGV("init encoded packet ...");
@@ -853,34 +890,47 @@ int streamer_encode_audio(uint8_t *dataPCM16, int sampleCount) {
 //    t_encoded_packet.size = sizeof(t_encoded_packet);
 
     t_audio_frame->data[0] = data;
-//    t_audio_frame->pts = audio_frame_counter * 100;
-    t_audio_frame->pts = av_frame_get_best_effort_timestamp(t_audio_frame);
 
-    LOGV("start encoing audio ...");
+//    memcpy(t_audio_frame->data[0], data, sampleCount * 4);
+
+//    t_audio_frame->pts = audio_frame_counter * 100;
+//    t_audio_frame->pts = av_frame_get_best_effort_timestamp(t_audio_frame);
+
+    LOGV("start encoding audio ...");
     res = avcodec_encode_audio2(out_audio_codec_ctx, &t_encoded_packet, t_audio_frame, &got_output);
+
+
+    t_encoded_packet.pts = audio_frame_counter;
+    t_encoded_packet.flags |= AV_PKT_FLAG_KEY;
+
+
     if (res < 0) {
-        LOGE("failed to encode audio !!! res -> %d",res);
+        LOGE("failed to encode audio !!! res -> %d", res);
         return res;
     }
 
 //    LOGV("t_encoded_packet.data -> %s\n",t_encoded_packet.data);
-    LOGV("t_encoded_packet.size -> %d\n",t_encoded_packet.size);
+    LOGV("t_encoded_packet.size -> %d\n", t_encoded_packet.size);
 
     if (got_output == 1) {
-        LOGV("encode audio packet successfully ,try setting extra info\t [size:%5d] ...",
+        LOGV("encode audio packet successfully ,try setting extra info\t [size:%d] ...",
              t_encoded_packet.size);
 
 //        t_encoded_packet.data
         t_encoded_packet.stream_index = out_audio_avstream->index;
 
+        LOGE("out_audio_avstream->index -> %d", out_audio_avstream->index);
+
 
         LOGV("start to write audio packet ...");
-        av_interleaved_write_frame(out_format_ctx, &t_encoded_packet);
+        av_write_frame(out_format_ctx, &t_encoded_packet);
+//        av_interleaved_write_frame(out_format_ctx, &t_encoded_packet);
 
-        free(data);
+        LOGE(":) successfully with audio frame %d", audio_frame_counter);
+//        free(data);
         av_free_packet(&t_encoded_packet);
 
-        LOGV(":) successfully with audio frame %d", audio_frame_counter);
+
         audio_frame_counter++;
         return 0;
     } else {
