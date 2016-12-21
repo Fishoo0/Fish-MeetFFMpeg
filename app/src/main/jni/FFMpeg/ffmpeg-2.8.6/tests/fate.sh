@@ -117,6 +117,6 @@ mkdir -p ${build}
 
 configure >configure.log 2>&1 || fail 3 "error configuring"
 compile   >compile.log   2>&1 || fail 2 "error compiling"
-fate      >test.log      2>&1 || fail 1 "error testing"
+fate      >test.log      2>&1 || quit 1 "error testing"
 report 0 success
 clean

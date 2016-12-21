@@ -18028,7 +18028,7 @@ streams in each segment. Default is 0.
 
 =item B<unsafe>
 
-Activate unsafe mode: do not fail if segments have a different format.
+Activate unsafe mode: do not quit if segments have a different format.
 
 
 =back

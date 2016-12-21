@@ -1554,7 +1554,7 @@ how to cut the file into fragments:
 .IP "\fB\-moov_size\fR \fIbytes\fR" 4
 .IX Item "-moov_size bytes"
 Reserves space for the moov atom at the beginning of the file instead of placing the
-moov atom at the end. If the space reserved is insufficient, muxing will fail.
+moov atom at the end. If the space reserved is insufficient, muxing will quit.
 .IP "\fB\-movflags frag_keyframe\fR" 4
 .IX Item "-movflags frag_keyframe"
 Start a new fragment at each video keyframe.

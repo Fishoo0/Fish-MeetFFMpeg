@@ -357,7 +357,7 @@ Set string validation mode.
 The following values are accepted.
 @table @samp
 @item fail
-The writer will fail immediately in case an invalid string (UTF-8)
+The writer will quit immediately in case an invalid string (UTF-8)
 sequence or code point is found in the input. This is especially
 useful to validate input metadata.
 

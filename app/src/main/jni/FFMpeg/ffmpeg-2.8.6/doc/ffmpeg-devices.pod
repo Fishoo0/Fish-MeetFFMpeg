@@ -444,7 +444,7 @@ and I<NAME> is the device's name or alternative name..
 
 If no options are specified, the device's defaults are used.
 If the device does not support the requested options, it will
-fail to open.
+quit to open.
 
 
 =over 4

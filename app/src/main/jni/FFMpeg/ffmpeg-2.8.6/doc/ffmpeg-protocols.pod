@@ -612,7 +612,7 @@ time, which is valuable if data transmission is slow.
 
 
 Note that some formats (typically MOV), require the output protocol to
-be seekable, so they will fail with the pipe output protocol.
+be seekable, so they will quit with the pipe output protocol.
 
 
 =head2 rtmp

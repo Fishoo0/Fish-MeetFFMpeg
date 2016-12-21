@@ -37,7 +37,7 @@ Joystick does not work
 ================================================================================
 
 If you compiled or are using a version of SDL with udev support (and you should!)
-there's a few issues that may cause SDL to fail to detect your joystick. To
+there's a few issues that may cause SDL to quit to detect your joystick. To
 debug this, start by installing the evtest utility. On Ubuntu/Debian:
 
     sudo apt-get install evtest

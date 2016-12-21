@@ -1639,7 +1639,7 @@ index at the beginning of the file.
 </p>
 <p>If this option is set to a non-zero value, the muxer will reserve a given amount
 of space in the file header and then try to write the cues there when the muxing
-finishes. If the available space does not suffice, muxing will fail. A safe size
+finishes. If the available space does not suffice, muxing will quit. A safe size
 for most use cases should be about 50kB per hour of video.
 </p>
 <p>Note that cues are only written if the output is seekable and this option will
@@ -1703,7 +1703,7 @@ how to cut the file into fragments:
 <dl compact="compact">
 <dt>&lsquo;<samp>-moov_size <var>bytes</var></samp>&rsquo;</dt>
 <dd><p>Reserves space for the moov atom at the beginning of the file instead of placing the
-moov atom at the end. If the space reserved is insufficient, muxing will fail.
+moov atom at the end. If the space reserved is insufficient, muxing will quit.
 </p></dd>
 <dt>&lsquo;<samp>-movflags frag_keyframe</samp>&rsquo;</dt>
 <dd><p>Start a new fragment at each video keyframe.

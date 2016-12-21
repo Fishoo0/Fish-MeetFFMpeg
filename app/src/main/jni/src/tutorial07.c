@@ -370,8 +370,7 @@ int audio_decode_frame(VideoState *is, uint8_t *audio_buf, int buf_size, double 
             pts = is->audio_clock;
             *pts_ptr = pts;
             n = 2 * is->audio_ctx->channels;
-            is->audio_clock += (double) data_size /
-                               (double) (n * is->audio_ctx->sample_rate);
+            is->audio_clock += (double) data_size / (double) (n * is->audio_ctx->sample_rate);
             /* We have data, return it and come back for more later */
             return data_size;
         }
@@ -495,11 +494,13 @@ void video_refresh_timer(void *userdata) {
 
             is->video_current_pts = vp->pts;
             is->video_current_pts_time = av_gettime();
+
             delay = vp->pts - is->frame_last_pts; /* the pts from last time */
             if (delay <= 0 || delay >= 1.0) {
                 /* if incorrect delay, use previous one */
                 delay = is->frame_last_delay;
             }
+
             /* save for next time */
             is->frame_last_delay = delay;
             is->frame_last_pts = vp->pts;
@@ -672,10 +673,12 @@ int video_thread(void *arg) {
             // means we quit getting packets
             break;
         }
-        if (packet_queue_get(&is->videoq, packet, 1) < 0) {
-            // means we quit getting packets
-            break;
+
+        if (packet->data == flush_pkt.data) {
+            avcodec_flush_buffers(is->video_st->codec);
+            continue;
         }
+
         pts = 0;
 
         // Decode video frame
@@ -702,7 +705,6 @@ int video_thread(void *arg) {
 }
 
 int stream_component_open(VideoState *is, int stream_index) {
-
     AVFormatContext *pFormatCtx = is->pFormatCtx;
     AVCodecContext *codecCtx = NULL;
     AVCodec *codec = NULL;
@@ -886,6 +888,9 @@ int decode_thread(void *arg) {
             av_free_packet(packet);
         }
     }
+
+
+
     /* all done - wait for it */
     while (!is->quit) {
         SDL_Delay(100);

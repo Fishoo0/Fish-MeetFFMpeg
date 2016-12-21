@@ -572,7 +572,7 @@ ffmpeg -i input.flv -f avi -y md5:
 </pre></div>
 
 <p>Note that some formats (typically MOV) require the output protocol to
-be seekable, so they will fail with the MD5 output protocol.
+be seekable, so they will quit with the MD5 output protocol.
 </p>
 <a name="pipe"></a>
 <h2 class="section"><a href="ffmpeg-protocols.html#toc-pipe">2.16 pipe</a></h2>
@@ -617,7 +617,7 @@ time, which is valuable if data transmission is slow.
 </dl>
 
 <p>Note that some formats (typically MOV), require the output protocol to
-be seekable, so they will fail with the pipe output protocol.
+be seekable, so they will quit with the pipe output protocol.
 </p>
 <a name="rtmp"></a>
 <h2 class="section"><a href="ffmpeg-protocols.html#toc-rtmp">2.17 rtmp</a></h2>

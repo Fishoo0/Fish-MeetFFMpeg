@@ -6818,7 +6818,7 @@ func_mode_link ()
 			if test -z "$old_library" ; then
 			  echo
 			  echo "*** And there doesn't seem to be a static archive available"
-			  echo "*** The link will probably fail, sorry"
+			  echo "*** The link will probably quit, sorry"
 			else
 			  add="$dir/$old_library"
 			fi

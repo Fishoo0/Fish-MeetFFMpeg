@@ -21,6 +21,6 @@ public class MySDLActivity extends SDLActivity {
 
     @Override
     protected String[] getArguments() {
-        return new String[]{FileUtils.getMoveFilePath("test.mp4")};
+        return new String[]{"rtmp://live.hkstv.hk.lxdns.com/live/hks"};
     }
 }

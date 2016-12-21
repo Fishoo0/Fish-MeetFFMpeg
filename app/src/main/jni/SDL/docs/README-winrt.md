@@ -118,7 +118,7 @@ any other platform.
 
 1. SDL_GetPrefPath() would return an invalid path, one in which the path's
    directory had not been created.  Attempts to create files there
-   (via fopen(), for example), would fail, unless that directory was
+   (via fopen(), for example), would quit, unless that directory was
    explicitly created beforehand.
 
 2. SDL_GetPrefPath(), for non-WinPhone-based apps, would return a path inside

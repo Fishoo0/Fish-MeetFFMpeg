@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 #This is shell for ndk-building
+#garanteed ndk version android-ndk-r10e
 
 ndk-build NDK_LOG=1 \
         NDK_PROJECT_PATH=null \

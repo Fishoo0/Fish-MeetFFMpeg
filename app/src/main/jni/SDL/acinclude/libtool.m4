@@ -2971,7 +2971,7 @@ dnl not every word.  This closes a longstanding sh security hole.
 
 *** Warning: the command libtool uses to detect shared libraries,
 *** $file_magic_cmd, produces output that libtool cannot recognize.
-*** The result is that libtool may fail to recognize shared libraries
+*** The result is that libtool may quit to recognize shared libraries
 *** as such.  This will affect the creation of libtool libraries that
 *** depend on shared libraries, but programs linked with such libtool
 *** libraries will work regardless of this problem.  Nevertheless, you

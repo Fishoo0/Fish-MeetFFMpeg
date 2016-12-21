@@ -8104,7 +8104,7 @@ zmq_filter=yes
 zmq_filter_deps=libzmq
 zoompan_filter=yes
 zoompan_filter_deps=swscale
-WARNING: /Users/volador/Work/Library/android-ndk-r10e/toolchains/arm-linux-androideabi-4.8/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-pkg-config not found, library detection may fail.
+WARNING: /Users/volador/Work/Library/android-ndk-r10e/toolchains/arm-linux-androideabi-4.8/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-pkg-config not found, library detection may quit.
 mktemp -u XXXXXX
 x0gVhB
 check_cpp_condition stddef.h defined __ARM_ARCH_4__ || defined __TARGET_ARCH_4

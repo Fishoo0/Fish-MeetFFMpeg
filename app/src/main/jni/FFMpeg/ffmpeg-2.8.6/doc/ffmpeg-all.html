@@ -10852,7 +10852,7 @@ index at the beginning of the file.
 </p>
 <p>If this option is set to a non-zero value, the muxer will reserve a given amount
 of space in the file header and then try to write the cues there when the muxing
-finishes. If the available space does not suffice, muxing will fail. A safe size
+finishes. If the available space does not suffice, muxing will quit. A safe size
 for most use cases should be about 50kB per hour of video.
 </p>
 <p>Note that cues are only written if the output is seekable and this option will
@@ -10916,7 +10916,7 @@ how to cut the file into fragments:
 <dl compact="compact">
 <dt>&lsquo;<samp>-moov_size <var>bytes</var></samp>&rsquo;</dt>
 <dd><p>Reserves space for the moov atom at the beginning of the file instead of placing the
-moov atom at the end. If the space reserved is insufficient, muxing will fail.
+moov atom at the end. If the space reserved is insufficient, muxing will quit.
 </p></dd>
 <dt>&lsquo;<samp>-movflags frag_keyframe</samp>&rsquo;</dt>
 <dd><p>Start a new fragment at each video keyframe.
@@ -12388,7 +12388,7 @@ ffmpeg -i input.flv -f avi -y md5:
 </pre></div>
 
 <p>Note that some formats (typically MOV) require the output protocol to
-be seekable, so they will fail with the MD5 output protocol.
+be seekable, so they will quit with the MD5 output protocol.
 </p>
 <a name="pipe"></a>
 <h2 class="section"><a href="ffmpeg-all.html#toc-pipe">24.16 pipe</a></h2>
@@ -12433,7 +12433,7 @@ time, which is valuable if data transmission is slow.
 </dl>
 
 <p>Note that some formats (typically MOV), require the output protocol to
-be seekable, so they will fail with the pipe output protocol.
+be seekable, so they will quit with the pipe output protocol.
 </p>
 <a name="rtmp"></a>
 <h2 class="section"><a href="ffmpeg-all.html#toc-rtmp">24.17 rtmp</a></h2>
@@ -13734,7 +13734,7 @@ and <var>NAME</var> is the device&rsquo;s name or alternative name..
 
 <p>If no options are specified, the device&rsquo;s defaults are used.
 If the device does not support the requested options, it will
-fail to open.
+quit to open.
 </p>
 <dl compact="compact">
 <dt>&lsquo;<samp>video_size</samp>&rsquo;</dt>
@@ -21256,7 +21256,7 @@ parameter <var>text</var>.
 </dd>
 <dt>&lsquo;<samp>reload</samp>&rsquo;</dt>
 <dd><p>If set to 1, the <var>textfile</var> will be reloaded before each frame.
-Be sure to update it atomically, or it may be read partially, or even fail.
+Be sure to update it atomically, or it may be read partially, or even quit.
 </p>
 </dd>
 <dt>&lsquo;<samp>x</samp>&rsquo;</dt>
@@ -29529,7 +29529,7 @@ streams in each segment. Default is 0.
 </p>
 </dd>
 <dt>&lsquo;<samp>unsafe</samp>&rsquo;</dt>
-<dd><p>Activate unsafe mode: do not fail if segments have a different format.
+<dd><p>Activate unsafe mode: do not quit if segments have a different format.
 </p>
 </dd>
 </dl>

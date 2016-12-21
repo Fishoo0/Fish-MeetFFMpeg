@@ -1868,7 +1868,7 @@ how to cut the file into fragments:
 =item B<-moov_size> I<bytes>
 
 Reserves space for the moov atom at the beginning of the file instead of placing the
-moov atom at the end. If the space reserved is insufficient, muxing will fail.
+moov atom at the end. If the space reserved is insufficient, muxing will quit.
 
 =item B<-movflags frag_keyframe>
 
