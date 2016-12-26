@@ -78,6 +78,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     public void onMainClick(View view) {
         NDKUtils utils = new NDKUtils();
-        utils.studyLesson1(FileUtils.getMoveFilePath("test.mp4"), FileUtils.getMoveInternalDir("out"));
+        utils.studyLesson1(FileUtils.getMoveFilePath("test.mkv"), FileUtils.getMoveInternalDir("out"));
     }
 }

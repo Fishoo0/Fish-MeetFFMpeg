@@ -10,8 +10,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../SDL/include \
 
 LOCAL_SRC_FILES := \
                         ../SDL/src/main/android/SDL_android_main.c\
-                        android_player.c \
-                        lesson1.c
+                        dranger_player.c
 
 
 LOCAL_LDLIBS := -llog -ljnigraphics -lz -landroid -lm -pthread -lGLESv1_CM -lGLESv2
