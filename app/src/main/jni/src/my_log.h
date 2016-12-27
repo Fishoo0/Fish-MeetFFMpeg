@@ -7,9 +7,7 @@
 
 #include <android/log.h>
 
-#define TAG_LOG
-
-#ifndef TAG_LOG
+#ifdef NO_TAG_LOG
 #define TAG "JNI-FFMpeg" // 这个是自定义的LOG的标识
 #define LOGV(...) __android_log_print(ANDROID_LOG_VERBOSE,TAG,__VA_ARGS__) // 定义LOGD类型
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,TAG ,__VA_ARGS__) // 定义LOGD类型

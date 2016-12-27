@@ -13,11 +13,13 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 
+#define NO_TAG_LOG
+
 #include "my_log.h"
 
 #include "volador_demoffmpeg_JNIMain.h"
 
-#define DEBUG_INCLUDE
+//#define DEBUG_INCLUDE
 
 #include "../FFMpeg/include/libavcodec/avcodec.h"
 #include "../FFMpeg/include/libavutil/frame.h"
@@ -444,6 +446,8 @@ int initSDL(MyFFMpeg *ffMpeg, MySDL *sdl) {
 
     sdl->sdl_window = SDL_CreateWindow("SDL Player Demo Window", 0, 0, width, height,
                                        SDL_WINDOW_OPENGL);
+
+
     sdl->sdl_renderer = SDL_CreateRenderer(sdl->sdl_window, -1, 0); // why the params ???
 
     sdl->sdl_texture = SDL_CreateTexture(sdl->sdl_renderer, SDL_PIXELFORMAT_IYUV,

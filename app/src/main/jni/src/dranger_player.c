@@ -17,123 +17,9 @@
 
 #include "my_log.h"
 
-//#include "../FFMpeg/include/libavcodec/avcodec.h"
-//#include "../FFMpeg/include/libavformat/avformat.h"
-//#include "../FFMpeg/include/libswscale/swscale.h"
-//#include "../FFMpeg/include/libavutil/frame.h"
-//
-//#include "../FFMpeg/include/libavcodec/avfft.h"
-//#include "../FFMpeg/include/libavcodec/d3d11va.h"
-//#include "../FFMpeg/include/libavcodec/dv_profile.h"
-//#include "../FFMpeg/include/libavcodec/dxva2.h"
-//#include "../FFMpeg/include/libavcodec/old_codec_ids.h"
-//#include "../FFMpeg/include/libavcodec/qsv.h"
-//#include "../FFMpeg/include/libavcodec/vaapi.h"
-//#include "../FFMpeg/include/libavcodec/vda.h"
-//#include "../FFMpeg/include/libavcodec/vdpau.h"
-//#include "../FFMpeg/include/libavcodec/version.h"
-//#include "../FFMpeg/include/libavcodec/videotoolbox.h"
-//#include "../FFMpeg/include/libavcodec/vorbis_parser.h"
-//#include "../FFMpeg/include/libavcodec/xvmc.h"
-//
-//#include "../FFMpeg/include/libavutil/adler32.h"
-//#include "../FFMpeg/include/libavutil/aes.h"
-//#include "../FFMpeg/include/libavutil/attributes.h"
-//#include "../FFMpeg/include/libavutil/audio_fifo.h"
-//#include "../FFMpeg/include/libavutil/audioconvert.h"
-//#include "../FFMpeg/include/libavutil/avassert.h"
-//#include "../FFMpeg/include/libavutil/avconfig.h"
-//#include "../FFMpeg/include/libavutil/avstring.h"
-//#include "../FFMpeg/include/libavutil/avutil.h"
-//#include "../FFMpeg/include/libavutil/base64.h"
-//
-//#include "../FFMpeg/include/libavutil/blowfish.h"
-//#include "../FFMpeg/include/libavutil/bprint.h"
-//#include "../FFMpeg/include/libavutil/bswap.h"
-//#include "../FFMpeg/include/libavutil/buffer.h"
-//#include "../FFMpeg/include/libavutil/camellia.h"
-//#include "../FFMpeg/include/libavutil/cast5.h"
-//#include "../FFMpeg/include/libavutil/channel_layout.h"
-//#include "../FFMpeg/include/libavutil/common.h"
-//#include "../FFMpeg/include/libavutil/cpu.h"
-//#include "../FFMpeg/include/libavutil/crc.h"
-//
-//#include "../FFMpeg/include/libavutil/dict.h"
-//#include "../FFMpeg/include/libavutil/display.h"
-//#include "../FFMpeg/include/libavutil/downmix_info.h"
-//#include "../FFMpeg/include/libavutil/error.h"
-//#include "../FFMpeg/include/libavutil/eval.h"
-//#include "../FFMpeg/include/libavutil/ffversion.h"
-//#include "../FFMpeg/include/libavutil/fifo.h"
-//#include "../FFMpeg/include/libavutil/file.h"
-//
-//#include "../FFMpeg/include/libavutil/hash.h"
-//
-//#include "../FFMpeg/include/libavutil/hmac.h"
-//#include "../FFMpeg/include/libavutil/imgutils.h"
-//#include "../FFMpeg/include/libavutil/intfloat.h"
-//#include "../FFMpeg/include/libavutil/intreadwrite.h"
-//#include "../FFMpeg/include/libavutil/lfg.h"
-//#include "../FFMpeg/include/libavutil/log.h"
-//#include "../FFMpeg/include/libavutil/lzo.h"
-//#include "../FFMpeg/include/libavutil/macros.h"
-//#include "../FFMpeg/include/libavutil/mathematics.h"
-//#include "../FFMpeg/include/libavutil/md5.h"
-//
-//#include "../FFMpeg/include/libavutil/mem.h"
-//#include "../FFMpeg/include/libavutil/motion_vector.h"
-//#include "../FFMpeg/include/libavutil/murmur3.h"
-//#include "../FFMpeg/include/libavutil/old_pix_fmts.h"
-//#include "../FFMpeg/include/libavutil/opt.h"
-//#include "../FFMpeg/include/libavutil/parseutils.h"
-//#include "../FFMpeg/include/libavutil/pixdesc.h"
-//#include "../FFMpeg/include/libavutil/pixelutils.h"
-//#include "../FFMpeg/include/libavutil/pixfmt.h"
-//#include "../FFMpeg/include/libavutil/random_seed.h"
-//
-//#include "../FFMpeg/include/libavutil/rational.h"
-//#include "../FFMpeg/include/libavutil/replaygain.h"
-//#include "../FFMpeg/include/libavutil/ripemd.h"
-//#include "../FFMpeg/include/libavutil/samplefmt.h"
-//#include "../FFMpeg/include/libavutil/sha.h"
-//#include "../FFMpeg/include/libavutil/sha512.h"
-//#include "../FFMpeg/include/libavutil/stereo3d.h"
-//#include "../FFMpeg/include/libavutil/tea.h"
-//#include "../FFMpeg/include/libavutil/threadmessage.h"
-//#include "../FFMpeg/include/libavutil/time.h"
-//
-//#include "../FFMpeg/include/libavutil/timecode.h"
-//#include "../FFMpeg/include/libavutil/timestamp.h"
-//#include "../FFMpeg/include/libavutil/twofish.h"
-//#include "../FFMpeg/include/libavutil/version.h"
-//#include "../FFMpeg/include/libavutil/xtea.h"
-//
-//#include "../FFMpeg/include/libavdevice/avdevice.h"
-//#include "../FFMpeg/include/libavdevice/version.h"
-//
-//#include "../FFMpeg/include/libavfilter/asrc_abuffer.h"
-//#include "../FFMpeg/include/libavfilter/avfilter.h"
-//#include "../FFMpeg/include/libavfilter/avfiltergraph.h"
-//#include "../FFMpeg/include/libavfilter/buffersink.h"
-//#include "../FFMpeg/include/libavfilter/buffersrc.h"
-//#include "../FFMpeg/include/libavfilter/version.h"
-//
-//#include "../FFMpeg/include/libavformat/avformat.h"
-//#include "../FFMpeg/include/libavformat/avio.h"
-//#include "../FFMpeg/include/libavformat/version.h"
-//
-//#include "../FFMpeg/include/libswscale/swscale.h"
-//#include "../FFMpeg/include/libswscale/version.h"
-//
-//#include "../FFMpeg/include/libpostproc/version.h"
-//#include "../FFMpeg/include/libpostproc/postprocess.h"
-//
-//#include "../FFMpeg/include/libswresample/version.h"
-//#include "../FFMpeg/include/libswresample/swresample.h"
-//
+#define DEBUG_INCLUDE
 
-
-////////////////////////////////////////////////////////
+#ifdef DEBUG_INCLUDE
 
 #include "../FFMpeg/include/libavcodec/avcodec.h"
 #include "../FFMpeg/include/libavutil/frame.h"
@@ -206,6 +92,7 @@
 #include "../SDL/include/SDL_version.h"
 #include "../SDL/include/SDL_video.h"
 
+#endif
 
 #define MAX_AUDIO_FRAME_SIZE 192000
 #define VIDEO_PICTURE_QUEUE_SIZE 1
@@ -216,6 +103,7 @@
 
 #define FF_REFRESH_EVENT (SDL_USEREVENT)
 #define FF_QUIT_EVENT (SDL_USEREVENT + 1)
+#define FF_INIT_SDL_FOR_VIDEO (SDL_USEREVENT + 2)
 
 #define MAX_AUDIOQ_SIZE (5 * 16 * 1024)
 #define MAX_VIDEOQ_SIZE (5 * 256 * 1024)
@@ -358,7 +246,7 @@ static char *print_tag() {
 /**
  * Logging the packet
  */
-static void log_packet(const AVFormatContext *fmt_ctx, const AVPacket *pkt) {
+void log_packet(const AVFormatContext *fmt_ctx, const AVPacket *pkt) {
     AVRational *time_base = &fmt_ctx->streams[pkt->stream_index]->time_base;
 
     LOGV(TAG,
@@ -760,28 +648,14 @@ void video_display(VideoState *is, VideoPicture *vp) {
     LOGV(TAG, "video_display");
     LOGV(TAG, "rect:[%d,%d  %d,%d]", is->sdl_rect.x, is->sdl_rect.y, is->sdl_rect.w,
          is->sdl_rect.h);
+    LOGV(TAG, "##########################################");
     LOGV(TAG, "vp->frame->data[0] -> %d", *vp->frame->data[0]);
-
-//    static sdl_inited = 0;
-//    if (!sdl_inited) {
-//        is->sws_ctx = sws_getContext(is->video_ctx->width,
-//                                     is->video_ctx->height,
-//                                     is->video_ctx->pix_fmt,
-//                                     is->video_ctx->width, is->video_ctx->height,
-//                                     PIX_FMT_YUV420P,
-//                                     SWS_BICUBIC, NULL, NULL, NULL
-//        );
-//
-//        is->sdl_window = SDL_CreateWindow("Dranger Player", 0,
-//                                          0, is->video_ctx->width,
-//                                          is->video_ctx->height, SDL_WINDOW_OPENGL);
-//        is->sdl_rect.x = 0;
-//        is->sdl_rect.y = 0;
-//        is->sdl_rect.w = is->video_ctx->width;
-//        is->sdl_rect.h = is->video_ctx->height;
-//
-//        sdl_inited = 1;
-//    }
+    LOGV(TAG, "vp->frame->linesize[0] -> %d", vp->frame->linesize[0]);
+    LOGV(TAG, "vp->frame->data[1] -> %d", *vp->frame->data[1]);
+    LOGV(TAG, "vp->frame->linesize[1] -> %d", vp->frame->linesize[1]);
+    LOGV(TAG, "vp->frame->data[2] -> %d", *vp->frame->data[2]);
+    LOGV(TAG, "vp->frame->linesize[2] -> %d", vp->frame->linesize[2]);
+    LOGV(TAG, "##########################################");
 
     SDL_UpdateYUVTexture(is->sdl_texture, &is->sdl_rect,
                          vp->frame->data[0], vp->frame->linesize[0],
@@ -838,10 +712,10 @@ void video_refresh_timer(void *userdata) {
             if (actual_delay < 0.01) {
                 actual_delay = 0.01;
             }
-
             schedule_refresh(is, actual_delay);
 
             video_display(is, vp);
+
             if (++is->pictq.pictq_rindex == VIDEO_PICTURE_QUEUE_SIZE) {
                 is->pictq.pictq_rindex = 0;
             }
@@ -856,6 +730,13 @@ void video_refresh_timer(void *userdata) {
 
     } else {
         schedule_refresh(is, 100);
+    }
+}
+
+
+int alloc_picture_if_need(VideoState *is, VideoPicture *vp) {
+    if (!vp->allocated) {
+
     }
 }
 
@@ -919,20 +800,6 @@ double synchronize_video(VideoState *is, AVFrame *frame, double pts) {
     return pts_second;
 }
 
-
-int alloc_picture_if_need(VideoState *is, VideoPicture *vp) {
-    if (!vp->allocated) {
-        vp->frame = av_frame_alloc();
-        unsigned char *buffer = av_malloc(
-                av_image_get_buffer_size(AV_PIX_FMT_YUV420P, is->video_ctx->width,
-                                         is->video_ctx->height, 1));
-        av_image_fill_arrays(vp->frame->data, vp->frame->linesize, buffer, AV_PIX_FMT_YUV420P,
-                             is->video_ctx->width, is->video_ctx->height, 1);
-        vp->allocated = 1;
-    }
-}
-
-
 int video_thread(void *args) {
     VideoState *is = (VideoState *) args;
     AVPacket packet;
@@ -966,7 +833,7 @@ int video_thread(void *args) {
             continue;
         }
 
-        AVFrame *frame = av_frame_alloc();
+        AVFrame *frame = av_frame_alloc(); //alloc once
         ret = avcodec_decode_video2(is->video_ctx, frame, &got_picture, &packet);
         if (ret < 0) {
             LOGE(TAG, "Error when decode video ,errMsg -> %s", av_err2str(ret));
@@ -1083,6 +950,17 @@ int stream_component_open(VideoState *is, int stream_index) {
 
             packet_queue_init(&is->videoq);
 
+            VideoPicture *vp = &is->pictq.queue[0];
+
+            //init vp picture for showing
+            vp->frame = av_frame_alloc();
+            unsigned char *buffer = av_malloc(
+                    av_image_get_buffer_size(AV_PIX_FMT_YUV420P, is->video_ctx->width,
+                                             is->video_ctx->height, 1));
+            av_image_fill_arrays(vp->frame->data, vp->frame->linesize, buffer, AV_PIX_FMT_YUV420P,
+                                 is->video_ctx->width, is->video_ctx->height, 1);
+
+
             is->sws_ctx = sws_getContext(
                     stream->codec->width,
                     stream->codec->height,
@@ -1092,19 +970,39 @@ int stream_component_open(VideoState *is, int stream_index) {
                     SWS_BICUBIC, NULL, NULL, NULL
             );
 
-            is->sdl_rect.x = 0;
-            is->sdl_rect.y = 0;
-            is->sdl_rect.w = stream->codec->width;
-            is->sdl_rect.h = stream->codec->height;
+            //init sdl for video
+            SDL_Event event;
+            event.type = FF_INIT_SDL_FOR_VIDEO;
+            SDL_PushEvent(&event);
 
-            is->sdl_window = SDL_CreateWindow("Dranger Player", 0,
-                                              0, stream->codec->width,
-                                              stream->codec->height, SDL_WINDOW_OPENGL);
+//            is->sdl_rect.x = 0;
+//            is->sdl_rect.y = 0;
+//            is->sdl_rect.w = stream->codec->width;
+//            is->sdl_rect.h = stream->codec->height;
 
-            is->sdl_render = SDL_CreateRenderer(is->sdl_window, -1, 0);
-            is->sdl_texture = SDL_CreateTexture(is->sdl_render, SDL_PIXELFORMAT_IYUV,
-                                                SDL_TEXTUREACCESS_STREAMING, stream->codec->width,
-                                                stream->codec->height);
+//            is->sdl_window = SDL_CreateWindow("Dranger Player", 0,
+//                                              0, stream->codec->width,
+//                                              stream->codec->height, SDL_WINDOW_OPENGL);
+//
+//            if (is->sdl_window == NULL) {
+//                LOGE(TAG, "Error when create SDLWindow ! errMsg -> %s", SDL_GetError());
+//                return -1;
+//            }
+//
+//            is->sdl_render = SDL_CreateRenderer(is->sdl_window, -1, 0);
+//
+//            if (is->sdl_render == NULL) {
+//                LOGE(TAG, "Error when create SDLRender ,errMsg -> %s", SDL_GetError());
+//                return -1;
+//            }
+//
+//            is->sdl_texture = SDL_CreateTexture(is->sdl_render, SDL_PIXELFORMAT_IYUV,
+//                                                SDL_TEXTUREACCESS_STREAMING, stream->codec->width,
+//                                                stream->codec->height);
+//            if (is->sdl_texture == NULL) {
+//                LOGE(TAG, "Error when create SDLTexture,errMsg -> %s", SDL_GetError());
+//                return -1;
+//            }
 
             //create video thread for image display ,make video display behaviors like audio
             is->video_tid = SDL_CreateThread(video_thread, "Video Thread", is);
@@ -1235,6 +1133,50 @@ int decode_thread(void *args) {
 
 
 /**
+ *
+ * Warning: SDL Window and many others must be initialized in some special thread ,currently i
+ * know it works in main thread.
+ * Any further digger would be post here ,be patient !
+ *
+ */
+int init_sdl_for_video(VideoState *is) {
+    int width = is->video_ctx->width;
+    int height = is->video_ctx->height;
+
+    is->sdl_rect.x = 0;
+    is->sdl_rect.y = 0;
+    is->sdl_rect.w = width;
+    is->sdl_rect.h = height;
+
+    is->sdl_window = SDL_CreateWindow("Dranger Player", 0,
+                                      0, width,
+                                      height, SDL_WINDOW_OPENGL);
+
+    if (is->sdl_window == NULL) {
+        LOGE(TAG, "Error when create SDLWindow ! errMsg -> %s", SDL_GetError());
+        return -1;
+    }
+
+    is->sdl_render = SDL_CreateRenderer(is->sdl_window, -1, 0);
+
+    if (is->sdl_render == NULL) {
+        LOGE(TAG, "Error when create SDLRender ,errMsg -> %s", SDL_GetError());
+        return -1;
+    }
+
+    is->sdl_texture = SDL_CreateTexture(is->sdl_render, SDL_PIXELFORMAT_IYUV,
+                                        SDL_TEXTUREACCESS_STREAMING, width,
+                                        height);
+    if (is->sdl_texture == NULL) {
+        LOGE(TAG, "Error when create SDLTexture,errMsg -> %s", SDL_GetError());
+        return -1;
+    }
+
+    return 0;
+}
+
+
+/**
  * Starting the player for test
  */
 int start(const char *videoPath) {
@@ -1271,6 +1213,7 @@ int start(const char *videoPath) {
         switch (sdl_event.type) {
             case SDL_KEYDOWN:
                 break;
+
             case SDL_QUIT:
             case FF_QUIT_EVENT:
                 is->quit = 1;
@@ -1281,6 +1224,12 @@ int start(const char *videoPath) {
             case FF_REFRESH_EVENT:
                 //refresh video here ,learn from audio refresh
                 video_refresh_timer((void *) sdl_event.user.data1);
+                break;
+            case FF_INIT_SDL_FOR_VIDEO:
+                if (init_sdl_for_video(is) < 0) {
+                    LOGE(TAG, "Error when init sdl for video !");
+                    quit();
+                }
                 break;
         }
     }
