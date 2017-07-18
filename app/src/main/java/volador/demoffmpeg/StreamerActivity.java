@@ -23,7 +23,7 @@ public class StreamerActivity extends Activity {
         final EditText output = (EditText) findViewById(R.id.output);
 
         input.setText("test1.mp4");
-        output.setText("rtmp://192.168.1.101:1935/fishdemo/android");
+        output.setText("rtmp://45.77.47.182:1935/fish/android");
 
         input.setText("test.yuv");
         output.setText("testyuv.h264");
